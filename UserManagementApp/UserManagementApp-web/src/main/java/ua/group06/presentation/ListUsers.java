@@ -72,7 +72,7 @@ public class ListUsers extends HttpServlet {
         String fname = request.getParameter("firstName");
         String lname = request.getParameter("lastName");
         String email = request.getParameter("email");
-        User user = new User(fname, lname, email);
+        User user = new User(fname, lname, email, "passwd");
         if ("Add".equalsIgnoreCase(action)) {
             userFacade.create(user);
         } else if ("Edit".equalsIgnoreCase(action)) {

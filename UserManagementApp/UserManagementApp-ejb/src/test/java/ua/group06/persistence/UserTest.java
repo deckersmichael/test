@@ -43,7 +43,7 @@ public class UserTest {
      */
     @Test
     public void testFullName() {
-        User instance = new User("John", "Doe", "a@a.a");
+        User instance = new User("John", "Doe", "a@a.a", "secret");
         String expResult = "John Doe";
         String result = instance.fullName();
         assertEquals(expResult, result);

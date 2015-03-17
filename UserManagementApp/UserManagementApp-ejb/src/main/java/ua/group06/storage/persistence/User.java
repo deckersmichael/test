@@ -35,13 +35,24 @@ public class User implements Serializable {
     private String firstName;
     @Column(name="LASTNAME")
     private String lastName;
+    // TODO: just for testing. We shouldn't save plain text passwords :)
+    private String password;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
     
     public User(){}
     
-    public User(String fname, String lname, String email) {
+    public User(String fname, String lname, String email, String password) {
         this.firstName = fname;
         this.lastName = lname;
         this.email = email;
+        this.password = password;
     }
     
     public String fullName() {

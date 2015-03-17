@@ -12,19 +12,18 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import ua.group06.storage.business.UserFacadeLocal;
+import ua.group06.logic.UserRegistrationServiceLocal;
 import ua.group06.storage.persistence.User;
 
 /**
  *
  * @author matson
  */
-@WebServlet(name = "CreateUser", urlPatterns = {"/registration"})
-public class CreateUser extends HttpServlet {
+@WebServlet(name = "UserRegistration", urlPatterns = {"/registration"})
+public class UserRegistration extends HttpServlet {
     @EJB
-    private UserFacadeLocal userFacade;
+    private UserRegistrationServiceLocal userService;
 
-    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -38,6 +37,7 @@ public class CreateUser extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.getRequestDispatcher("registration.jsp").forward(request, response);
+
     }
 
     /**
@@ -51,11 +51,11 @@ public class CreateUser extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String fname = request.getParameter("firstName");
-        String lname = request.getParameter("lastName");
-        String email = request.getParameter("email");
-        User user = new User(fname, lname, email);
-        userFacade.create(user);
+        String fname    = request.getParameter("firstName");
+        String lname    = request.getParameter("lastName");
+        String email    = request.getParameter("email");
+        String password = request.getParameter("password");
+        User result = userService.register(fname, lname, email, password);
         response.sendRedirect("users");
     }
 

@@ -24,15 +24,19 @@
                 <table>
                     <tr>
                         <td>First name</td>
-                        <td><input type="text" name="firstName" value="${user.firstName}" /></td>
+                        <td><input type="text" name="firstName" /></td>
                     </tr>
                     <tr>
                         <td>Last name</td>
-                        <td><input type="text" name="lastName" value="${user.lastName}" /></td>
+                        <td><input type="text" name="lastName" /></td>
                     </tr>
                     <tr>
                         <td>Email</td>
-                        <td><input type="text" name="email" value="${user.email}" /></td>
+                        <td><input type="text" name="email" /></td>
+                    </tr>
+                                        <tr>
+                        <td>Password</td>
+                        <td><input type="password" name="password" /></td>
                     </tr>
                     <tr>
                         <td colspan="2">
