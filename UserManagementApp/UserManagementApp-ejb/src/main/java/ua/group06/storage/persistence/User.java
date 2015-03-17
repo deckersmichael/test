@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ua.group06.persistence;
+package ua.group06.storage.persistence;
 
 import java.io.Serializable;
 import javax.persistence.Column;

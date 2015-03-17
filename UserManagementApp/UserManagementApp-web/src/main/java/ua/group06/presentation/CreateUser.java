@@ -12,8 +12,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import ua.group06.business.UserFacadeLocal;
-import ua.group06.persistence.User;
+import ua.group06.storage.business.UserFacadeLocal;
+import ua.group06.storage.persistence.User;
 
 /**
  *
@@ -23,8 +23,8 @@ import ua.group06.persistence.User;
 public class CreateUser extends HttpServlet {
     @EJB
     private UserFacadeLocal userFacade;
-    
 
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

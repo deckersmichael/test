@@ -5,6 +5,7 @@
  */
 package ua.group06.persistence;
 
+import ua.group06.storage.persistence.User;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
