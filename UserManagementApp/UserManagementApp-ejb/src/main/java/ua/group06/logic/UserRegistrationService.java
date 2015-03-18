@@ -7,6 +7,7 @@ package ua.group06.logic;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.EntityExistsException;
 import ua.group06.storage.business.UserFacadeLocal;
 import ua.group06.storage.persistence.User;
 
@@ -23,15 +24,14 @@ public class UserRegistrationService implements UserRegistrationServiceLocal {
     @Override
     public User register(final String firstName, final String lastName, 
             final String email, final String password) {
-        // check if already exists with email
-        // error if exists
-        // else create new user
         User user = new User(firstName, lastName, email, password);
-        userFacade.create(user);
+        try {
+            userFacade.create(user);
+        } catch (EntityExistsException e) {
+            // TODO: Should we change the return type or should we throw exception?
+            user = null;
+        }
         return user;
     }
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
     
 }

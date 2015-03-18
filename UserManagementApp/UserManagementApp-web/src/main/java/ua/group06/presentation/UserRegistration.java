@@ -56,6 +56,7 @@ public class UserRegistration extends HttpServlet {
         String email    = request.getParameter("email");
         String password = request.getParameter("password");
         User result = userService.register(fname, lname, email, password);
+        request.setAttribute("user", result);
         response.sendRedirect("users");
     }
 
