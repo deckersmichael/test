@@ -1,6 +1,6 @@
 <%-- 
-    Document   : registration
-    Created on : Mar 14, 2015, 10:30:32 PM
+    Document   : login
+    Created on : Mar 18, 2015, 1:28:00 PM
     Author     : matson
 --%>
 
@@ -9,26 +9,18 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>User Registration</title>
+        <title>User Login</title>
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 
     </head>
     <body>
         <div class="container">
             <div class="jumbotron">
-                <h1>User registration</h1>
-                <p>You can create an user by filling the form below.</p>
+                <h1>Login</h1>
+                <p>No account? Register in <a href='./registration'>here</a>.</p>
             </div>
-            <form action="./registration" method="POST">
+            <form action="./login" method="POST">
                 <table>
-                    <tr>
-                        <td>First name</td>
-                        <td><input type="text" name="firstName" /></td>
-                    </tr>
-                    <tr>
-                        <td>Last name</td>
-                        <td><input type="text" name="lastName" /></td>
-                    </tr>
                     <tr>
                         <td>Email</td>
                         <td><input type="text" name="email" /></td>
@@ -39,7 +31,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <input type="submit" name="action" class="btn btn-default" value="Register" />
+                            <input type="submit" name="action" class="btn btn-default" value="Login" />
                         </td>                
                     </tr>            
                 </table>
