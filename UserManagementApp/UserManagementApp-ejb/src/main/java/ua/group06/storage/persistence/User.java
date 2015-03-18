@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  *
@@ -31,10 +33,19 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotNull
     @Column(name="FIRSTNAME")
     private String firstName;
+    @NotNull
     @Column(name="LASTNAME")
     private String lastName;
+    @NotNull
+    @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
+            + "[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
+            + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9]"
+            + "(?:[a-z0-9-]*[a-z0-9])?",
+            message = "{invalid.email}")
+    private String email;
     // TODO: just for testing. We shouldn't save plain text passwords :)
     private String password;
 
@@ -82,7 +93,6 @@ public class User implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-    private String email;
 
     public Long getId() {
         return id;
