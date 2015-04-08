@@ -17,14 +17,15 @@ import ua.group06.persistence.User;
  */
 @Stateless
 public class UserRegistrationService implements UserRegistrationServiceLocal {
-    
     @EJB
     private UserFacadeLocal userFacade;
+    @EJB
+    private PasswordEncryptionServiceLocal passwordService;
 
     @Override
     public User register(User user) {
         try {
-            userFacade.create(user);
+            userFacade.create( passwordService.encrypt(user) );
         } catch (EntityExistsException e) {
             // TODO: Should we change the return type or should we throw exception?
             user = null;
