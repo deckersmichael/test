@@ -12,6 +12,6 @@
         <title>Home Page</title>
     </head>
     <body>
-        <h1>User creation succeeded: ${result}</h1>
+        <h1>Created user's name: ${user.firstName}</h1>
     </body>
 </html>

@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ua.group06.storage.business;
+package ua.group06.business;
 
 import java.util.List;
 import javax.ejb.Local;
-import ua.group06.storage.persistence.User;
+import ua.group06.persistence.User;
 
 /**
  *

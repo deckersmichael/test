@@ -6,6 +6,7 @@
 package ua.group06.logic;
 
 import javax.ejb.Stateless;
+import ua.group06.entities.User;
 
 /**
  *
@@ -13,10 +14,11 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class UserService implements UserServiceLocal {
+    private RestUserClient restClient = new RestUserClient();
 
     @Override
-    public boolean register(String firstName, String lastName, String email, String password) {
-        return true;
+    public User register(User user) {
+        return restClient.register(user);
     }
     
 }

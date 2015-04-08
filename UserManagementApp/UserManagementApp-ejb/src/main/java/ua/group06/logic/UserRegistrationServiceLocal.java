@@ -6,7 +6,7 @@
 package ua.group06.logic;
 
 import javax.ejb.Local;
-import ua.group06.storage.persistence.User;
+import ua.group06.persistence.User;
 
 /**
  *
@@ -15,6 +15,6 @@ import ua.group06.storage.persistence.User;
 @Local
 public interface UserRegistrationServiceLocal {
 
-    User register(String firstName, String lastName, String email, String password);
+    User register(User user);
     
 }

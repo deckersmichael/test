@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import ua.group06.entities.User;
 import ua.group06.logic.UserServiceLocal;
 
 /**
@@ -53,9 +54,9 @@ public class UserRegistration extends HttpServlet {
         String lname    = request.getParameter("lastName");
         String email    = request.getParameter("email");
         String password = request.getParameter("password");
-        boolean success = userService.register(fname, lname, email, password);
-        String result = success ? "Success" : "Fail";
-        request.setAttribute("result", result);
+        User user = new User(fname, lname, email, password);
+        User createdUser = userService.register(user);
+        request.setAttribute("user", createdUser);
         request.getRequestDispatcher("homepage.jsp").forward(request, response);
     }
 

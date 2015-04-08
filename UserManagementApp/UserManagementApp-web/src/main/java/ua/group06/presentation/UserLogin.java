@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import ua.group06.logic.UserAuthenticationServiceLocal;
-import ua.group06.storage.persistence.User;
+import ua.group06.persistence.User;
 
 /**
  *

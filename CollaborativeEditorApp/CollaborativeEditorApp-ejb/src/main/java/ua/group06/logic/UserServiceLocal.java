@@ -6,6 +6,7 @@
 package ua.group06.logic;
 
 import javax.ejb.Local;
+import ua.group06.entities.User;
 
 /**
  *
@@ -14,6 +15,6 @@ import javax.ejb.Local;
 @Local
 public interface UserServiceLocal {
 
-    boolean register(String firstName, String lastName, String email, String password);
+    User register(User user);
     
 }

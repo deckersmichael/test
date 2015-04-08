@@ -7,8 +7,8 @@ package ua.group06.logic;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import ua.group06.storage.business.UserFacadeLocal;
-import ua.group06.storage.persistence.User;
+import ua.group06.business.UserFacadeLocal;
+import ua.group06.persistence.User;
 
 /**
  *
