@@ -23,7 +23,6 @@ import ua.group06.persistence.User;
  * @author matson
  */
 @Stateless
-//@Path("/user")
 @ApplicationPath("/resources")
 @Path("users")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -37,10 +36,5 @@ public class UserService extends Application {
         User createdUser = regService.register(user);
         return Response.ok(createdUser).build();
     }
-
-//    @POST
-//    public boolean register(String firstName, String lastName, String email, String password) {
-//        return true;
-//    }
 
 }
