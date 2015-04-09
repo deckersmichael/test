@@ -7,9 +7,12 @@ package ua.group06.rest;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
+import ua.group06.logic.UserAuthenticationServiceLocal;
 import ua.group06.logic.UserRegistrationServiceLocal;
 import ua.group06.persistence.User;
 
@@ -22,11 +25,21 @@ import ua.group06.persistence.User;
 public class UserService extends RestResource {
     @EJB
     private UserRegistrationServiceLocal regService;
+    @EJB
+    private UserAuthenticationServiceLocal authService;
     
     @POST
     public Response register(User user) {
         User createdUser = regService.register(user);
         return Response.ok(createdUser).build();
+    }
+
+    @GET
+    @Path("login")
+    public Response login(@QueryParam("email") String email,
+                          @QueryParam("password") String password) {
+        User foundUser = authService.authenticate(email, password);
+        return Response.ok(foundUser).build();
     }
 
 }

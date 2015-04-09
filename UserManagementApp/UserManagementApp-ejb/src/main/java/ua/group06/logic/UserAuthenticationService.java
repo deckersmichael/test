@@ -18,11 +18,17 @@ import ua.group06.persistence.User;
 public class UserAuthenticationService implements UserAuthenticationServiceLocal {
     @EJB
     private UserFacadeLocal userFacade;
+    @EJB
+    private PasswordEncryptionServiceLocal passwordService;
 
     @Override
+    // Exceptions for errors? Constant null cecking is bad.
     public User authenticate(String email, String password) {
-        // TODO: this uses just email and doesn't care about errors.
-        return userFacade.findByEmail(email);
+        User user = userFacade.findByEmail(email);
+        if (user == null) { return null; }
+        String encryptedPassword = user.getPassword();
+        boolean matching = passwordService.checkPassword(password, encryptedPassword);
+        return matching ? user : null;
     }
-    
+
 }
