@@ -13,5 +13,6 @@
     </head>
     <body>
         <h1>Created user's name: ${user.firstName}</h1>
+        <h1>Successful login: ${loggedIn}</h1>
     </body>
 </html>
