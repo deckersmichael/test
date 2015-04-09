@@ -23,7 +23,7 @@ public class UserService implements UserServiceLocal {
 
     @Override
     public User login(String email, String password) {
-        return new User("a", "b", email, "c");
+        return restClient.login(email, password);
     }
     
 }

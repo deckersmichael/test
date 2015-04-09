@@ -16,16 +16,27 @@ import ua.group06.entities.User;
  * @author matson
  */
 public class RestUserClient {
-    private final String ROOT = "http://localhost:8080/UserManagementApp-web/resources";
+    private final String ROOT = "http://localhost:8080/UserManagementApp-web/resources/users";
     
     public User register(User user){
         Client client = ClientBuilder.newClient();
         User createdUser;
         createdUser = client
-                .target(ROOT + "/users")
+                .target(ROOT)
                 .request("application/json")
                 .post(Entity.entity(user, MediaType.APPLICATION_JSON), User.class);
         return createdUser;
     }
     
+    public User login(String email, String password) {
+        Client client = ClientBuilder.newClient();
+        User user = client
+                .target(ROOT + "/login")
+                .queryParam("email", email)
+                .queryParam("password", password)
+                .request(MediaType.APPLICATION_JSON)
+                .get(User.class);
+        return user;
+    }
+
 }

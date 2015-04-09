@@ -6,7 +6,6 @@
 package ua.group06.rest;
 
 import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -21,9 +20,6 @@ import javax.ws.rs.core.MediaType;
 @ApplicationPath("/resources")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-
 public class RestResource extends Application {
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
 }
