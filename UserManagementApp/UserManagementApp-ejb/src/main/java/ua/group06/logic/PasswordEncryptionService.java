@@ -24,11 +24,18 @@ public class PasswordEncryptionService implements PasswordEncryptionServiceLocal
         user.setPassword(encrypted);
         return user;
     }
+    
+    @Override
+    public boolean checkPassword(String cleartext, String encrypted) {
+        if (null == encrypted || !encrypted.startsWith("$2a$")) {
+            throw new java.lang.IllegalArgumentException("Invalid hash provided for comparison");
+        }
+        return BCrypt.checkpw(cleartext, encrypted);
+    }
 
     private static String encryptPassword(String plaintext) {
         String salt = BCrypt.gensalt(workload);
-        String hashed_password = BCrypt.hashpw(plaintext, salt);
-        return(hashed_password);
+        return BCrypt.hashpw(plaintext, salt);
     }
     
 }

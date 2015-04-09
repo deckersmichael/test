@@ -16,5 +16,7 @@ import ua.group06.persistence.User;
 public interface PasswordEncryptionServiceLocal {
 
     User encrypt(User user);
+
+    boolean checkPassword(String cleartext, String encrypted);
     
 }
