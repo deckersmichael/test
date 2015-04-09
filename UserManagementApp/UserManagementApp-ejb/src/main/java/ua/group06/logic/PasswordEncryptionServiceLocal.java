@@ -15,6 +15,6 @@ import ua.group06.persistence.User;
 @Local
 public interface PasswordEncryptionServiceLocal {
 
-    User encrypt(User usre);
+    User encrypt(User user);
     
 }
