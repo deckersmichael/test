@@ -46,7 +46,8 @@ public class User implements Serializable {
             + "(?:[a-z0-9-]*[a-z0-9])?",
             message = "{invalid.email}")
     private String email;
-    // TODO: just for testing. We shouldn't save plain text passwords :)
+    @NotNull
+    // TODO: find an annotation to exclude this from JSON.
     private String password;
 
     public String getPassword() {
