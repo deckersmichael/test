@@ -43,7 +43,7 @@ public class deleteFile extends HttpServlet {
             User user = (User) session.getAttribute("user");
             fileService.delete(fid, user);
         }
-        response.sendRedirect("homepage");
+        response.sendRedirect("files");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

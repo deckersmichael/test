@@ -40,10 +40,6 @@ public class HomePage extends HttpServlet {
             throws ServletException, IOException {
         int fileCount = fileService.fileCount();
         request.setAttribute("fileCount", fileCount);
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        List<File> myFiles = fileService.filesForUser(user);
-        request.setAttribute("files", myFiles);
         request.getRequestDispatcher("homepage.jsp").forward(request, response);
     }
 

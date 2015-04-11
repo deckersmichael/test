@@ -6,6 +6,7 @@
 package ua.group06.presentation;
 
 import java.io.IOException;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,11 +22,28 @@ import ua.group06.persistence.File;
  *
  * @author matson
  */
-@WebServlet(name = "EditFile", urlPatterns = {"/file"})
-public class EditFile extends HttpServlet {
-
+@WebServlet(name = "FileManager", urlPatterns = {"/files"})
+public class FileManager extends HttpServlet {
     @EJB
     private FileServiceLocal fileService;
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        List<File> myFiles = fileService.filesForUser(user);
+        request.setAttribute("files", myFiles);
+        request.getRequestDispatcher("files.jsp").forward(request, response);
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -39,17 +57,7 @@ public class EditFile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String fidString = request.getParameter("id");
-        if (fidString != null) {
-            Long fid = Long.parseLong(fidString);
-            HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
-            File file = fileService.show(fid, user);
-            request.setAttribute("file", file);
-            request.getRequestDispatcher("file.jsp").forward(request, response);
-        } else {
-            response.sendRedirect("homepage");
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -63,17 +71,7 @@ public class EditFile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String name = request.getParameter("name");
-        String title = request.getParameter("title");
-        String content = request.getParameter("content");
-        String fidString = request.getParameter("id");
-        if (fidString != null) {
-            Long id = Long.parseLong(fidString);
-            HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
-            fileService.update(id, user, name, title, content);
-        }
-        response.sendRedirect("files");
+        processRequest(request, response);
     }
 
     /**

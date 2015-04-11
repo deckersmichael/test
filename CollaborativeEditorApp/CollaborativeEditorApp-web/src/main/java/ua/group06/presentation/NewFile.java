@@ -61,7 +61,7 @@ public class NewFile extends HttpServlet {
         Long uid = user.getId();
         File file = new File(uid, name, title, content);
         File newFile = fileService.create(file);
-        response.sendRedirect("homepage");
+        response.sendRedirect("files");
     }
 
     /**
