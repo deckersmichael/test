@@ -6,13 +6,13 @@
 package ua.group06.presentation;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import ua.group06.entities.User;
 import ua.group06.logic.UserServiceLocal;
 
@@ -54,10 +54,11 @@ public class UserLogin extends HttpServlet {
         String email    = request.getParameter("email");
         String password = request.getParameter("password");
         User user = userService.login(email, password);
-        String loggedIn = (user != null ? "Yes" : "No"); // For debugging
-        request.setAttribute("loggedIn", loggedIn);
-        request.setAttribute("user", user);
-        request.getRequestDispatcher("homepage.jsp").forward(request, response);
+        if (user != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
+        }
+        response.sendRedirect("homepage");
     }
 
     /**
