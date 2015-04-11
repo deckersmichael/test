@@ -14,7 +14,7 @@
     <body>
         <h1>Name: ${user.firstName} ${user.lastName}</h1>
         <h2>Total file count in system: ${fileCount}</h2>
-        <br>
         <h2>Your files can be found <a href="files">here</a></h2>
+        <p><a href="logout">logout</a>
     </body>
 </html>
