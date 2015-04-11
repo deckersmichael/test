@@ -22,11 +22,13 @@
                 <th>Name</th>
                 <th>Title</th>
                 <th>Edit</th>
+                <th>Delete</th>
                 <c:forEach items="${files}" var="file">
                     <tr>
                         <td>${file.name}</td>
                         <td>${file.title}</td>
                         <td><a href="file?id=${file.id}">edit</a></td>
+                        <td><a href="deletefile?id=${file.id}">delete</a></td>
                     </tr>
                 </c:forEach>
             </table>

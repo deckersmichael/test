@@ -60,6 +60,14 @@ public class FileService implements FileServiceLocal {
         }
     }
 
+    @Override
+    public void delete(Long fid, User user) {
+        File file = fileFacade.find(fid);
+        if (allowed(fid, user)) {
+            fileFacade.remove(file);
+        }
+    }
+
     private boolean allowed(Long fid, User user) {
         return fid.equals(user.getId());
     }
