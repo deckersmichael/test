@@ -6,6 +6,7 @@
 package ua.group06.presentation;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,8 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import ua.group06.entities.User;
-import ua.group06.logic.UserServiceLocal;
+import ua.group06.logic.UserAuthenticationServiceLocal;
+import ua.group06.persistence.User;
 
 /**
  *
@@ -23,8 +24,7 @@ import ua.group06.logic.UserServiceLocal;
 @WebServlet(name = "UserLogin", urlPatterns = {"/login"})
 public class UserLogin extends HttpServlet {
     @EJB
-    private UserServiceLocal userService;
-
+    private UserAuthenticationServiceLocal authService;
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -54,7 +54,7 @@ public class UserLogin extends HttpServlet {
             throws ServletException, IOException {
         String email    = request.getParameter("email");
         String password = request.getParameter("password");
-        User user = userService.login(email, password);
+        User user = authService.authenticate(email, password);
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
