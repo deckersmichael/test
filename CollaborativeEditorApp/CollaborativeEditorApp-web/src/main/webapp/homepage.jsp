@@ -26,10 +26,12 @@
                     <tr>
                         <td>${file.name}</td>
                         <td>${file.title}</td>
-                        <td><a href="${pageContext.request.contextPath}/file?id=${file.id}">edit</a></td>
+                        <td><a href="file?id=${file.id}">edit</a></td>
                     </tr>
                 </c:forEach>
             </table>
+            <br>
+            <a href="newfile">New file</a>
         </div>
     </body>
 </html>
