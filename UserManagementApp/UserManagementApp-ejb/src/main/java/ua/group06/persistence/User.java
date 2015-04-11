@@ -5,6 +5,7 @@
  */
 package ua.group06.persistence;
 
+import com.owlike.genson.annotation.JsonIgnore;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -48,8 +49,10 @@ public class User implements Serializable {
     private String email;
     @NotNull
     // TODO: find an annotation to exclude this from JSON.
-    private String password;
+    @JsonIgnore(serialize=false)
+    private transient String password;
 
+    @JsonIgnore(serialize=false)
     public String getPassword() {
         return password;
     }
