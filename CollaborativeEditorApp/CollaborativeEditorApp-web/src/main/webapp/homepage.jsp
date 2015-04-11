@@ -14,5 +14,6 @@
     <body>
         <h1>Your first name: ${user.firstName}</h1>
         <h1>Your last name: ${user.lastName}</h1>
+        <h2>File count in system: ${fileCount}</h2>
     </body>
 </html>

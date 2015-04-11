@@ -12,33 +12,18 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import ua.group06.business.FileFacadeLocal;
 import ua.group06.logic.FileServiceLocal;
+import ua.group06.persistence.File;
 
 /**
  *
  * @author matson
  */
-@WebServlet(name = "HomePage", urlPatterns = {"/homepage"})
-public class HomePage extends HttpServlet {
+@WebServlet(name = "NewFile", urlPatterns = {"/newfile"})
+public class NewFile extends HttpServlet {
     @EJB
-    private FileFacadeLocal fileFacade;
+    private FileServiceLocal fileService;
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int fileCount = fileFacade.count();
-        request.setAttribute("fileCount", fileCount);
-        request.getRequestDispatcher("homepage.jsp").forward(request, response);
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -52,7 +37,7 @@ public class HomePage extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher("createFile.jsp").forward(request, response);
     }
 
     /**
@@ -66,7 +51,12 @@ public class HomePage extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String name    = request.getParameter("name");
+        String title    = request.getParameter("title");
+        String content    = request.getParameter("content");
+        File file = new File(name, title, content);
+        File newFile = fileService.create(file);
+        response.sendRedirect("homepage");
     }
 
     /**
