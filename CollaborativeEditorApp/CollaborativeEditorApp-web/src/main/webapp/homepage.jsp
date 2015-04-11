@@ -21,10 +21,12 @@
             <table border="1">
                 <th>Name</th>
                 <th>Title</th>
+                <th>Edit</th>
                 <c:forEach items="${files}" var="file">
                     <tr>
                         <td>${file.name}</td>
                         <td>${file.title}</td>
+                        <td><a href="${pageContext.request.contextPath}/file?id=${file.id}">edit</a></td>
                     </tr>
                 </c:forEach>
             </table>

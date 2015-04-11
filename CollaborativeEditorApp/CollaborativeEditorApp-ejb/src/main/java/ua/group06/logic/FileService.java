@@ -43,5 +43,29 @@ public class FileService implements FileServiceLocal {
         return fileFacade.findAllForUser(user.getId());
     }
 
+    @Override
+    public File show(Long fid, User user) {
+        File file = fileFacade.find(fid);
+        return allowed(file, user) ? file : null;
+    }
+
+    @Override
+    public void update(Long id, User user, String name, String title, String content) {
+        File file = fileFacade.find(id);
+        if (allowed(id, user)) {
+            file.setName(name);
+            file.setTitle(title);
+            file.setContent(content);
+            fileFacade.edit(file);
+        }
+    }
+
+    private boolean allowed(Long fid, User user) {
+        return fid.equals(user.getId());
+    }
     
+    private boolean allowed(File file, User user) {
+        return file.getUserId().equals(user.getId());
+    }
+
 }

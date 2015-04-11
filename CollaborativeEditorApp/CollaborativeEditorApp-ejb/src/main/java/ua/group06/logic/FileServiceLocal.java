@@ -22,5 +22,9 @@ public interface FileServiceLocal {
     int fileCount();
 
     List<File> filesForUser(User user);
+
+    File show(Long fid, User user);
+
+    void update(Long id, User user, String name, String title, String content);
     
 }
