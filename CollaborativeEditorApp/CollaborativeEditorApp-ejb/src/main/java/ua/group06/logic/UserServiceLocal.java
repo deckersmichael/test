@@ -15,8 +15,6 @@ import ua.group06.entities.User;
 @Local
 public interface UserServiceLocal {
 
-    User register(User user);
-
     User login(String email, String password);
     
 }

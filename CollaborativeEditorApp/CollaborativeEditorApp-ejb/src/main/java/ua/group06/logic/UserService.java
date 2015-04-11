@@ -17,11 +17,6 @@ public class UserService implements UserServiceLocal {
     private RestUserClient restClient = new RestUserClient();
 
     @Override
-    public User register(User user) {
-        return restClient.register(user);
-    }
-
-    @Override
     public User login(String email, String password) {
         return restClient.login(email, password);
     }

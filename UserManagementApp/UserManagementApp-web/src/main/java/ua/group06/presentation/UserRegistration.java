@@ -6,14 +6,15 @@
 package ua.group06.presentation;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import ua.group06.entities.User;
-import ua.group06.logic.UserServiceLocal;
+import ua.group06.logic.UserRegistrationServiceLocal;
+import ua.group06.persistence.User;
 
 /**
  *
@@ -22,7 +23,8 @@ import ua.group06.logic.UserServiceLocal;
 @WebServlet(name = "UserRegistration", urlPatterns = {"/registration"})
 public class UserRegistration extends HttpServlet {
     @EJB
-    private UserServiceLocal userService;
+    private UserRegistrationServiceLocal userService;
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -57,7 +59,8 @@ public class UserRegistration extends HttpServlet {
         User user = new User(fname, lname, email, password);
         User createdUser = userService.register(user);
         request.setAttribute("user", createdUser);
-        request.getRequestDispatcher("homepage.jsp").forward(request, response);
+        // TODO: redirect back to editor app or more generally to REFERER from headers.
+        request.getRequestDispatcher("users.jsp").forward(request, response);
     }
 
     /**
