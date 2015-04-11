@@ -6,14 +6,18 @@
 package ua.group06.presentation;
 
 import java.io.IOException;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import ua.group06.business.FileFacadeLocal;
+import ua.group06.entities.User;
 import ua.group06.logic.FileServiceLocal;
+import ua.group06.persistence.File;
 
 /**
  *
@@ -22,7 +26,7 @@ import ua.group06.logic.FileServiceLocal;
 @WebServlet(name = "HomePage", urlPatterns = {"/homepage"})
 public class HomePage extends HttpServlet {
     @EJB
-    private FileFacadeLocal fileFacade;
+    private FileServiceLocal fileService;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,8 +39,12 @@ public class HomePage extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int fileCount = fileFacade.count();
+        int fileCount = fileService.fileCount();
         request.setAttribute("fileCount", fileCount);
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        List<File> myFiles = fileService.filesForUser(user);
+        request.setAttribute("files", myFiles);
         request.getRequestDispatcher("homepage.jsp").forward(request, response);
     }
 

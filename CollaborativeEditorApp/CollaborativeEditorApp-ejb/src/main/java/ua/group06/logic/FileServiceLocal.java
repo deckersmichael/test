@@ -5,7 +5,9 @@
  */
 package ua.group06.logic;
 
+import java.util.List;
 import javax.ejb.Local;
+import ua.group06.entities.User;
 import ua.group06.persistence.File;
 
 /**
@@ -16,5 +18,9 @@ import ua.group06.persistence.File;
 public interface FileServiceLocal {
 
     File create(File file);
+
+    int fileCount();
+
+    List<File> filesForUser(User user);
     
 }

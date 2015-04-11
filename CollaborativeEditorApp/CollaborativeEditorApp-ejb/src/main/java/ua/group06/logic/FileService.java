@@ -5,10 +5,12 @@
  */
 package ua.group06.logic;
 
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityExistsException;
 import ua.group06.business.FileFacadeLocal;
+import ua.group06.entities.User;
 import ua.group06.persistence.File;
 
 /**
@@ -30,5 +32,16 @@ public class FileService implements FileServiceLocal {
         }
         return file;
     }
+
+    @Override
+    public int fileCount() {
+        return fileFacade.count();
+    }
+
+    @Override
+    public List<File> filesForUser(User user) {
+        return fileFacade.findAllForUser(user.getId());
+    }
+
     
 }

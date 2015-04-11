@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,8 +13,21 @@
         <title>Home Page</title>
     </head>
     <body>
-        <h1>Your first name: ${user.firstName}</h1>
-        <h1>Your last name: ${user.lastName}</h1>
+        <h1>Name: ${user.firstName} ${user.lastName}</h1>
         <h2>File count in system: ${fileCount}</h2>
+        <br>
+        <h2>Your files:</h2>
+        <div class="container">
+            <table border="1">
+                <th>Name</th>
+                <th>Title</th>
+                <c:forEach items="${files}" var="file">
+                    <tr>
+                        <td>${file.name}</td>
+                        <td>${file.title}</td>
+                    </tr>
+                </c:forEach>
+            </table>
+        </div>
     </body>
 </html>

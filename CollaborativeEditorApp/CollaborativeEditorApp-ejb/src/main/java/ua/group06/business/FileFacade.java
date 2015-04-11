@@ -5,6 +5,7 @@
  */
 package ua.group06.business;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,5 +28,14 @@ public class FileFacade extends AbstractFacade<File> implements FileFacadeLocal 
     public FileFacade() {
         super(File.class);
     }
-    
+
+    @Override
+    public List<File> findAllForUser(Long uid) {
+        List results = em.createNamedQuery(
+                "File.findAllForUser")
+                .setParameter("uid", uid)
+                .getResultList();
+        return results;
+    }
+
 }

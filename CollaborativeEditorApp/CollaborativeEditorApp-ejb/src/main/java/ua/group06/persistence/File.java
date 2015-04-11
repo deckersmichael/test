@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -17,11 +19,18 @@ import javax.validation.constraints.NotNull;
  * @author matson
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(
+            name="File.findAllForUser",
+            query="SELECT f FROM File f WHERE f.userId = :uid")
+})
 public class File implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotNull
+    private Long userId;
     @NotNull
     private String name;
     @NotNull
@@ -31,12 +40,21 @@ public class File implements Serializable {
 
     public File () {}
     
-    public File(String name, String title, String content) {
+    public File(Long userId, String name, String title, String content) {
+        this.userId = userId;
         this.name = name;
         this.title = title;
         this.content = content;
     }
     
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     public String getName() {
         return name;
     }

@@ -30,4 +30,6 @@ public interface FileFacadeLocal {
 
     int count();
 
+    List<File> findAllForUser(Long uid);
+
 }
