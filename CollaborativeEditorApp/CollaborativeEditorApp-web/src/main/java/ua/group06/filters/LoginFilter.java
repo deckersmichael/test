@@ -55,7 +55,7 @@ public class LoginFilter implements Filter {
     }
     
     private boolean publicURI(String uri) {
-        return uri.startsWith("login");
+        return uri.startsWith("login") || uri.startsWith("styles");
     }
     
     private boolean notLogged(HttpSession session) {
