@@ -12,10 +12,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import ua.group06.entities.User;
 import ua.group06.logic.FileServiceLocal;
 import ua.group06.persistence.File;
+import ua.group06.util.ServletUtil;
 
 /**
  *
@@ -42,8 +42,7 @@ public class EditFile extends HttpServlet {
         String fidString = request.getParameter("id");
         if (fidString != null) {
             Long fid = Long.parseLong(fidString);
-            HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
+            User user = ServletUtil.currentUser(request);
             File file = fileService.show(fid, user);
             request.setAttribute("file", file);
             request.getRequestDispatcher("file.jsp").forward(request, response);
@@ -69,8 +68,7 @@ public class EditFile extends HttpServlet {
         String fidString = request.getParameter("id");
         if (fidString != null) {
             Long id = Long.parseLong(fidString);
-            HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
+            User user = ServletUtil.currentUser(request);
             fileService.update(id, user, name, title, content);
         }
         response.sendRedirect("files");

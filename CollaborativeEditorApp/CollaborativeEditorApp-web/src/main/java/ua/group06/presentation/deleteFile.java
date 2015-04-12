@@ -12,9 +12,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import ua.group06.entities.User;
 import ua.group06.logic.FileServiceLocal;
+import ua.group06.util.ServletUtil;
 
 /**
  *
@@ -39,8 +39,7 @@ public class deleteFile extends HttpServlet {
         String fidString = request.getParameter("id");
         if (fidString != null) {
             Long fid = Long.parseLong(fidString);
-            HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
+            User user = ServletUtil.currentUser(request);
             fileService.delete(fid, user);
         }
         response.sendRedirect("files");

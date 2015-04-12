@@ -13,10 +13,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import ua.group06.entities.User;
 import ua.group06.logic.FileServiceLocal;
 import ua.group06.persistence.File;
+import ua.group06.util.ServletUtil;
 
 /**
  *
@@ -38,8 +38,7 @@ public class FileManager extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+        User user = ServletUtil.currentUser(request);
         List<File> myFiles = fileService.filesForUser(user);
         request.setAttribute("files", myFiles);
         request.getRequestDispatcher("files.jsp").forward(request, response);

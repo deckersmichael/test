@@ -12,10 +12,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import ua.group06.entities.User;
 import ua.group06.logic.FileServiceLocal;
 import ua.group06.persistence.File;
+import ua.group06.util.ServletUtil;
 
 /**
  *
@@ -56,9 +55,7 @@ public class NewFile extends HttpServlet {
         String name    = request.getParameter("name");
         String title    = request.getParameter("title");
         String content    = request.getParameter("content");
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        Long uid = user.getId();
+        Long uid = ServletUtil.currentUserId(request);
         File file = new File(uid, name, title, content);
         File newFile = fileService.create(file);
         response.sendRedirect("files");
