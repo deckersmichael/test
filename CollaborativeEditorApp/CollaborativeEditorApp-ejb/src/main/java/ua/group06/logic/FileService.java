@@ -73,7 +73,7 @@ public class FileService implements FileServiceLocal {
     }
     
     private boolean allowed(File file, User user) {
-        return file.getUserId().equals(user.getId());
+        return allowed(file.getUserId(), user);
     }
 
 }
