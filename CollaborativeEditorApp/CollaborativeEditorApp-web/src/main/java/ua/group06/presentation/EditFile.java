@@ -62,14 +62,12 @@ public class EditFile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String name = request.getParameter("name");
-        String title = request.getParameter("title");
         String content = request.getParameter("content");
         String fidString = request.getParameter("id");
         if (fidString != null) {
             Long id = Long.parseLong(fidString);
             User user = ServletUtil.currentUser(request);
-            fileService.update(id, user, name, title, content);
+            fileService.update(id, user, content);
         }
         response.sendRedirect("files");
     }

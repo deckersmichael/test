@@ -20,14 +20,6 @@
                     <td><input type="text" name="name" /></td>
                 </tr>
                 <tr>
-                    <td>Title</td>
-                    <td><input type="text" name="title" /></td>
-                </tr>
-                <tr>
-                    <td>content</td>
-                    <td><input type="text" name="content" /></td>
-                </tr>
-                <tr>
                     <td colspan="2">
                         <input type="submit" name="action" class="btn btn-default" value="Create" />
                     </td>                

@@ -50,11 +50,9 @@ public class FileService implements FileServiceLocal {
     }
 
     @Override
-    public void update(Long id, User user, String name, String title, String content) {
+    public void update(Long id, User user, String content) {
         File file = fileFacade.find(id);
         if (allowed(id, user)) {
-            file.setName(name);
-            file.setTitle(title);
             file.setContent(content);
             fileFacade.edit(file);
         }

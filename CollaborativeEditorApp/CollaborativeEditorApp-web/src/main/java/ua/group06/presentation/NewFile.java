@@ -53,12 +53,10 @@ public class NewFile extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String name    = request.getParameter("name");
-        String title    = request.getParameter("title");
-        String content    = request.getParameter("content");
         Long uid = ServletUtil.currentUserId(request);
-        File file = new File(uid, name, title, content);
+        File file = new File(uid, name, "");
         File newFile = fileService.create(file);
-        response.sendRedirect("files");
+        response.sendRedirect("file?id=" + newFile.getId());
     }
 
     /**

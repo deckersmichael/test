@@ -35,15 +35,12 @@ public class File implements Serializable {
     private String name;
     @NotNull
     private String content;
-    @NotNull
-    private String title;
 
     public File () {}
     
-    public File(Long userId, String name, String title, String content) {
+    public File(Long userId, String name, String content) {
         this.userId = userId;
         this.name = name;
-        this.title = title;
         this.content = content;
     }
     
@@ -69,14 +66,6 @@ public class File implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public Long getId() {
