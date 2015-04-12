@@ -6,7 +6,8 @@
 --%>
 
 <%@tag description="Template tag" pageEncoding="UTF-8"%>
-<%@attribute name="alert" required="false"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@attribute name="alert" required="false" type="java.lang.String"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -59,12 +60,14 @@
 
         <div class="container">
             <div class="template">
+
                 <c:if test="${not empty alert}">
                     <div class="alert alert-warning alert-dismissible fade in" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <strong>Error.</strong> ${alert}
                     </div>
                 </c:if>
+
                 <jsp:doBody/>
             </div>
         </div><!-- /.container -->
