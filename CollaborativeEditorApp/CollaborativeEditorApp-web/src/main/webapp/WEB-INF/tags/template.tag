@@ -1,5 +1,5 @@
 <%-- 
-    Document   : wrapper
+    Document   : template
     Created on : Apr 12, 2015, 2:11:29 PM
     Author     : matson
     more info  : http://stackoverflow.com/questions/1296235/jsp-tricks-to-make-templating-easier/3257426#3257426
