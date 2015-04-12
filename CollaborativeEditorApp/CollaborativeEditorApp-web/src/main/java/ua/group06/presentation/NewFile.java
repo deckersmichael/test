@@ -52,11 +52,16 @@ public class NewFile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String name    = request.getParameter("name");
-        Long uid = ServletUtil.currentUserId(request);
-        File file = new File(uid, name, "");
-        File newFile = fileService.create(file);
-        response.sendRedirect("file?id=" + newFile.getId());
+        String name = request.getParameter("name");
+        if (name != null && !name.isEmpty()) {
+            Long uid = ServletUtil.currentUserId(request);
+            File file = new File(uid, name, "");
+            File newFile = fileService.create(file);
+            response.sendRedirect("file?id=" + newFile.getId());
+        } else {
+            request.setAttribute("alert", "Make sure you fill all fields.");
+            request.getRequestDispatcher("createFile.jsp").forward(request, response);
+        }
     }
 
     /**
