@@ -11,7 +11,7 @@
 <t:template>
     <div class="container">
         <h1>Your files:</h1>
-        <table border="1">
+        <table class="table table-striped">
             <th>Name</th>
             <th>Title</th>
             <th>Edit</th>
@@ -20,12 +20,12 @@
                 <tr>
                     <td>${file.name}</td>
                     <td>${file.title}</td>
-                    <td><a href="file?id=${file.id}">edit</a></td>
-                    <td><a href="deletefile?id=${file.id}">delete</a></td>
+                    <td><a role="button" class="btn btn-default btn-xs" href="file?id=${file.id}">edit</a></td>
+                    <td><a role="button" class="btn btn-danger btn-xs" href="deletefile?id=${file.id}">delete</a></td>
                 </tr>
             </c:forEach>
         </table>
         <br>
-        <a href="newfile">New file</a>
+        <a role="button" class="btn btn-primary" href="newfile">New file</a>
     </div>
 </t:template>
