@@ -11,9 +11,9 @@
     <form action="./file" method="POST" class="form-horizontal">
         <div class ="editor-header">
             ${file.name}
-            <button type="submit" class="btn btn-primary">Save</button>
         </div>
-        <input type="hidden" name="id" value="${file.id}">
+        <input type="hidden" id="fileId" value="${file.id}">
+        <input type="hidden" id="userId" value="${user.id}">
         <input type="hidden" name="content" id="inputContent" value="${file.content}">
         <div id="editor">${file.content}</div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.9/ace.js" type="text/javascript" charset="utf-8"></script>

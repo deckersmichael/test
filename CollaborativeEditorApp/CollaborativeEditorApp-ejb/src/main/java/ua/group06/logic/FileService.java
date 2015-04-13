@@ -19,6 +19,7 @@ import ua.group06.persistence.File;
  */
 @Stateless
 public class FileService implements FileServiceLocal {
+
     @EJB
     private FileFacadeLocal fileFacade;
 
@@ -69,9 +70,17 @@ public class FileService implements FileServiceLocal {
     private boolean allowed(Long fid, User user) {
         return fid.equals(user.getId());
     }
-    
+
     private boolean allowed(File file, User user) {
         return allowed(file.getUserId(), user);
+    }
+
+    @Override
+    //TODO remove before demo. This is just for testing without security.
+    public void testUpdate(Long id, Long uid, String content) {
+        File file = fileFacade.find(id);
+        file.setContent(content);
+        fileFacade.edit(file);
     }
 
 }

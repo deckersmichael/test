@@ -56,6 +56,7 @@ public class LoginFilter implements Filter {
     
     private boolean publicURI(String uri) {
         return uri.startsWith("login")
+                || uri.startsWith("resource")
                 || uri.startsWith("styles")
                 || uri.startsWith("scripts");
     }
