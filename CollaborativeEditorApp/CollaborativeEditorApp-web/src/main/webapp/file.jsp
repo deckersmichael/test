@@ -9,8 +9,8 @@
 
 <t:template>
     <form action="./file" method="POST" class="form-horizontal">
-        <div class ="editor-header">
-            ${file.name}
+        <div id="editor-header">
+            ${file.name} <span id="editor-notification">(Saved)</span>
         </div>
         <input type="hidden" id="fileId" value="${file.id}">
         <input type="hidden" id="userId" value="${user.id}">
