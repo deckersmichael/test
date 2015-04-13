@@ -11,6 +11,15 @@ and open the template in the editor.
 body {
   padding-top: 50px;
 }
+
 .template {
   padding: 40px 15px;
+}
+
+#editor { 
+    position: absolute;
+    top: 140px;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
