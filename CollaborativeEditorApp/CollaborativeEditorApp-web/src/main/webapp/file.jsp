@@ -17,13 +17,6 @@
         <input type="hidden" name="content" id="inputContent" value="${file.content}">
         <div id="editor">${file.content}</div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.9/ace.js" type="text/javascript" charset="utf-8"></script>
-        <script>
-            var editor = ace.edit("editor");
-            editor.setTheme("ace/theme/github");
-            editor.getSession().setMode("ace/mode/plain_text");
-            editor.getSession().on('change', function(e) {
-                $("#inputContent").val(editor.getValue());
-            });
-        </script>
+        <script src="scripts/editor.js"></script>
     </form>
 </t:template>
