@@ -8,7 +8,7 @@ $(document).ready(function () {
     var APIURI = "http://localhost:8080/CollaborativeEditorApp-web/resources/";
     var editor = ace.edit("editor");
     var shadowContent = editor.getValue();
-    editor.setTheme("ace/theme/github");
+    editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/plain_text");
 
     var setNotificationValue = function (value) {
