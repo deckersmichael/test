@@ -5,6 +5,7 @@
  */
 package ua.group06.business;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,5 +28,14 @@ public class SessionFacade extends AbstractFacade<Session> implements SessionFac
     public SessionFacade() {
         super(Session.class);
     }
-    
+
+    @Override
+    public Session findByToken(String token) {
+        List results = em.createNamedQuery(
+                "Session.findByToken")
+                .setParameter("token", token)
+                .getResultList();
+        return results.isEmpty() ? null : (Session) results.get(0);
+    }
+
 }

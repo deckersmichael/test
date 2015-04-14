@@ -12,6 +12,7 @@ import javax.persistence.EntityExistsException;
 import ua.group06.business.FileFacadeLocal;
 import ua.group06.entities.User;
 import ua.group06.persistence.File;
+import ua.group06.persistence.Session;
 
 /**
  *
@@ -22,6 +23,8 @@ public class FileService implements FileServiceLocal {
 
     @EJB
     private FileFacadeLocal fileFacade;
+    @EJB
+    private SessionServiceLocal sessionService;
 
     @Override
     public File create(File file) {
@@ -69,8 +72,8 @@ public class FileService implements FileServiceLocal {
 
     @Override
     public void updateContent(Long fid, String token, String content) {
-        if (allowedToEdit(token, fid)) {
-            File file = fileFacade.find(fid);
+        File file = fileFacade.find(fid);
+        if (allowedToEdit(token, file.getUserId())) {
             file.setContent(content);
             fileFacade.edit(file);
         }
@@ -84,9 +87,9 @@ public class FileService implements FileServiceLocal {
         return allowed(file.getUserId(), user);
     }
 
-    // TODO: implement
-    private boolean allowedToEdit(String token, Long fid) {
-        return true;
+    private boolean allowedToEdit(String token, Long uid) {
+        Session session = sessionService.findByToken(token);
+        return session.getUserId().equals(uid);
     }
 
 }

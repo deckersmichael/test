@@ -16,5 +16,7 @@ import ua.group06.persistence.Session;
 public interface SessionServiceLocal {
 
     Session create(long uid);
+
+    Session findByToken(String token);
     
 }

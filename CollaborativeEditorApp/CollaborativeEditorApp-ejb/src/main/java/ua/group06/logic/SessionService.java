@@ -27,12 +27,16 @@ public class SessionService implements SessionServiceLocal {
         sessionFacade.create(session);
         return session;
     }
-    
-    
+
+    @Override
+    public Session findByToken(String token) {
+        return sessionFacade.findByToken(token);
+    }
+
     private String generateToken() {
         String token = UUID.randomUUID().toString();
         // TODO: check that no such token exists.
         return token;
     }
-    
+
 }

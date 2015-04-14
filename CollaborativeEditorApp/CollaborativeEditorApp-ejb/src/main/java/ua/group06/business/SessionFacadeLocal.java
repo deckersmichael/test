@@ -29,5 +29,7 @@ public interface SessionFacadeLocal {
     List<Session> findRange(int[] range);
 
     int count();
+
+    Session findByToken(String token);
     
 }
