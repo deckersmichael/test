@@ -67,6 +67,15 @@ public class FileService implements FileServiceLocal {
         }
     }
 
+    @Override
+    public void updateContent(Long fid, String token, String content) {
+        if (allowedToEdit(token, fid)) {
+            File file = fileFacade.find(fid);
+            file.setContent(content);
+            fileFacade.edit(file);
+        }
+    }
+
     private boolean allowed(Long fid, User user) {
         return fid.equals(user.getId());
     }
@@ -75,12 +84,9 @@ public class FileService implements FileServiceLocal {
         return allowed(file.getUserId(), user);
     }
 
-    @Override
-    //TODO remove before demo. This is just for testing without security.
-    public void testUpdate(Long id, Long uid, String content) {
-        File file = fileFacade.find(id);
-        file.setContent(content);
-        fileFacade.edit(file);
+    // TODO: implement
+    private boolean allowedToEdit(String token, Long fid) {
+        return true;
     }
 
 }

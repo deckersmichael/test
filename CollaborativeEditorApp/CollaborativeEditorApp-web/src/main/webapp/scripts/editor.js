@@ -43,9 +43,7 @@ $(document).ready(function () {
     var handleUpdate = function () {
         var content = editor.getValue();
         if (content !== shadowContent) {
-            var fileId = $("#fileId").val();
-            var userId = $("#userId").val(); // This will be probably replaced by a token
-            var data = {fileId: fileId, userId: userId, content: content};
+            var data = {fileId: Info.fileId, token: Info.token, content: content};
             sendUpdate(data);
         }
     };

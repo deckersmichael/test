@@ -15,24 +15,24 @@ public class FileUpdate implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private Long fileId;
-    private Long userId;
+    private String token;
     private String content;
 
     public FileUpdate() {
     }
 
-    public FileUpdate(Long id, Long uid, String content) {
+    public FileUpdate(Long id, String token, String content) {
         this.fileId = id;
-        this.userId = uid;
+        this.token = token;
         this.content = content;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getToken() {
+        return token;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public Long getFileId() {

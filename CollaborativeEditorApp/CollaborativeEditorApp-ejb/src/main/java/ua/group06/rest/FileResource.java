@@ -26,10 +26,10 @@ public class FileResource extends RestResource {
     
     @POST
     @Path("update")
-    public Response update(FileUpdate update) {
-        //TODO: this is temporary method. This will be replaced with something more secure.
-        fileService.testUpdate(update.getFileId(), update.getUserId(), update.getContent());
+    // TODO: handle errors
+    public Response update(FileUpdate changes) {
+        fileService.updateContent(changes.getFileId(), changes.getToken(), changes.getContent());
         return Response.ok().build();
     }
-    
+
 }

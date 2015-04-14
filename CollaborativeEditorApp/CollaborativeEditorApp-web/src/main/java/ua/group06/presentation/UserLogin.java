@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import ua.group06.entities.User;
+import ua.group06.logic.SessionServiceLocal;
 import ua.group06.logic.UserServiceLocal;
 
 /**
@@ -24,6 +25,8 @@ import ua.group06.logic.UserServiceLocal;
 public class UserLogin extends HttpServlet {
     @EJB
     private UserServiceLocal userService;
+    @EJB
+    private SessionServiceLocal sessionService;
 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -58,6 +61,7 @@ public class UserLogin extends HttpServlet {
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
+            session.setAttribute("session", sessionService.create(user.getId()));
         }
         response.sendRedirect("homepage");
     }

@@ -29,6 +29,6 @@ public interface FileServiceLocal {
 
     void delete(Long fid, User user);
 
-    void testUpdate(Long id, Long uid, String content);
+    void updateContent(Long fid, String token, String content);
     
 }

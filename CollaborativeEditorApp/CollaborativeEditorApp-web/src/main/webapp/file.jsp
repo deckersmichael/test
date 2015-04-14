@@ -12,10 +12,14 @@
         <div id="editor-header">
             ${file.name} <span id="editor-notification">(Saved)</span>
         </div>
-        <input type="hidden" id="fileId" value="${file.id}">
-        <input type="hidden" id="userId" value="${user.id}">
         <input type="hidden" name="content" id="inputContent" value="${file.content}">
         <div id="editor">${file.content}</div>
+        <script>
+            var Info = {
+                fileId: ${file.id},
+                token: "${session.token}"
+            };
+        </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.9/ace.js" type="text/javascript" charset="utf-8"></script>
         <script src="scripts/editor.js"></script>
     </form>
