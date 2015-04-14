@@ -38,4 +38,10 @@ public class SessionFacade extends AbstractFacade<Session> implements SessionFac
         return results.isEmpty() ? null : (Session) results.get(0);
     }
 
+    @Override
+    public boolean tokenExists(String token) {
+        Session session = findByToken(token);
+        return session != null;
+    }
+
 }

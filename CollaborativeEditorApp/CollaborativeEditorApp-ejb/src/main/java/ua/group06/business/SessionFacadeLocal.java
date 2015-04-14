@@ -31,5 +31,7 @@ public interface SessionFacadeLocal {
     int count();
 
     Session findByToken(String token);
+
+    boolean tokenExists(String token);
     
 }

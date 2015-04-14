@@ -33,9 +33,12 @@ public class SessionService implements SessionServiceLocal {
         return sessionFacade.findByToken(token);
     }
 
+    // Generate unique token for user session. This will be used for authentication.
     private String generateToken() {
         String token = UUID.randomUUID().toString();
-        // TODO: check that no such token exists.
+        while (sessionFacade.tokenExists(token)) {
+            token = UUID.randomUUID().toString();
+        }
         return token;
     }
 
