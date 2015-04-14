@@ -10,6 +10,8 @@ import java.io.Serializable;
 /**
  *
  * @author matson
+ *
+ * This class is used when transferring update info with json from Javascript.
  */
 public class FileUpdate implements Serializable {
 

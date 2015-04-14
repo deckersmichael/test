@@ -17,6 +17,11 @@ import javax.persistence.Table;
 /**
  *
  * @author matson
+ *
+ * Class to track our custom session information.
+ *
+ * TODO: We should add some 'last action' timestamp to this class.
+ * With that timestamp we can kick the user out after time limit expires.
  */
 @Entity
 @Table(name="SESSIONS")

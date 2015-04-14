@@ -70,6 +70,8 @@ public class FileService implements FileServiceLocal {
         }
     }
 
+    // Update file content if user is allowed to edit given file.
+    // This is used by web service.
     @Override
     public void updateContent(Long fid, String token, String content) {
         File file = fileFacade.find(fid);
@@ -87,6 +89,7 @@ public class FileService implements FileServiceLocal {
         return allowed(file.getUserId(), user);
     }
 
+    // Check if user is allowed to edit given file.
     private boolean allowedToEdit(String token, Long uid) {
         Session session = sessionService.findByToken(token);
         return session.getUserId().equals(uid);
