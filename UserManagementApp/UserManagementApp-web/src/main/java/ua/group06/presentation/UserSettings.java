@@ -6,11 +6,16 @@
 package ua.group06.presentation;
 
 import java.io.IOException;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import ua.group06.logic.UserAuthenticationServiceLocal;
+import ua.group06.logic.UserSettingsServiceLocal;
+import ua.group06.persistence.User;
 
 /**
  *
@@ -18,7 +23,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "UserSettings", urlPatterns = {"/settings"})
 public class UserSettings extends HttpServlet {
-
+    @EJB
+    private UserSettingsServiceLocal userService;
+    /*@EJB
+    private UserAuthenticationServiceLocal authService;*/
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -48,7 +56,7 @@ public class UserSettings extends HttpServlet {
         processRequest(request, response);
     }
 
-    /**
+ /**
      * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
@@ -59,7 +67,53 @@ public class UserSettings extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        String email    = user.getEmail();
+        
+        String fname    = request.getParameter("firstName");
+        String lname    = request.getParameter("lastName");
+        String newPassword = request.getParameter("newPassword");
+        String confirmPassword = request.getParameter("confirmPassword");
+        String currentPassword = request.getParameter("currentPassword");
+        
+        /*user = authService.authenticate(email, currentPassword);
+        if(user!=null){*/
+            User newInfo = new User();
+            newInfo.setEmail(email);
+
+             if(fname!=null){
+                 newInfo.setFirstName(fname);
+             }
+             else{
+                 newInfo.setFirstName(user.getFirstName());
+             }
+
+             if(lname!=null){
+                 newInfo.setLastName(lname);
+             }
+             else{
+                 newInfo.setLastName(user.getLastName());
+             }
+
+            if(newPassword!=null && confirmPassword!=null){
+                if(!newPassword.equals(confirmPassword)){
+                    request.setAttribute("message", "The new passwords do not match");
+                }
+                else{
+                    newInfo.setPassword(newPassword);
+                }
+            }
+            else{
+                newInfo.setPassword(user.getPassword());
+            }
+             User sessionUser = userService.edit(newInfo);
+             session.setAttribute("user", sessionUser);
+
+        //}
+       
+        
+        response.sendRedirect("settings");
     }
 
     /**
