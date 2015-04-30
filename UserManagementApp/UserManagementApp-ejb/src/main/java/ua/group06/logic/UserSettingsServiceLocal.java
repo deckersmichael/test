@@ -15,4 +15,5 @@ import ua.group06.persistence.User;
 @Local
 public interface UserSettingsServiceLocal {
     User edit(User user);
+    User editPassword(User user);
 }

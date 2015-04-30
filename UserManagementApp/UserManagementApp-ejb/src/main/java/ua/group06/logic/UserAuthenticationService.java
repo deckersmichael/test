@@ -28,8 +28,6 @@ public class UserAuthenticationService implements UserAuthenticationServiceLocal
         if (user == null) { return null; }
         String encryptedPassword = user.getPassword();
         boolean matching = passwordService.checkPassword(password, encryptedPassword);
-        System.err.println(password + " " + encryptedPassword);
-        System.err.println("Password match: " + matching);
         return matching ? user : null;
     }
 
