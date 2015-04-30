@@ -56,7 +56,7 @@ public class FileService implements FileServiceLocal {
     @Override
     public void update(Long id, User user, String content) {
         File file = fileFacade.find(id);
-        if (allowed(id, user)) {
+        if (allowedFile(id, user)) {
             file.setContent(content);
             fileFacade.edit(file);
         }
@@ -65,7 +65,7 @@ public class FileService implements FileServiceLocal {
     @Override
     public void delete(Long fid, User user) {
         File file = fileFacade.find(fid);
-        if (allowed(fid, user)) {
+        if (allowedFile(fid, user)) {
             fileFacade.remove(file);
         }
     }
@@ -81,18 +81,41 @@ public class FileService implements FileServiceLocal {
         }
     }
 
-    private boolean allowed(Long fid, User user) {
-        return fid.equals(user.getId());
+    private boolean allowedUser(Long uid, User user) {
+        return uid.equals(user.getId());
+    }
+    
+    /**
+     * checks whether a certain user can modify a file
+     * TODO: add collaborators to check
+     * @param fid file ID
+     * @param user the user trying to modify
+     * @return whether the user can modify
+     */
+    private boolean allowedFile(Long fid, User user) {
+        return this.show(fid, user).getUserId().equals(user.getId());
     }
 
     private boolean allowed(File file, User user) {
-        return allowed(file.getUserId(), user);
+        return allowedUser(file.getUserId(), user);
     }
 
     // Check if user is allowed to edit given file.
     private boolean allowedToEdit(String token, Long uid) {
         Session session = sessionService.findByToken(token);
         return session.getUserId().equals(uid);
+    }
+
+    @Override
+    public void updateCollabs(Long fid, User user, boolean edit, String email) {
+        File file = fileFacade.find(fid);
+        if (allowedFile(fid, user)) {
+            if (edit)
+                file.addCollaborator(email);
+            else 
+                file.addSpectator(email);
+            fileFacade.edit(file);
+        }
     }
 
 }
