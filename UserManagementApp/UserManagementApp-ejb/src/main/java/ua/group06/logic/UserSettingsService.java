@@ -24,7 +24,7 @@ public class UserSettingsService implements UserSettingsServiceLocal {
     @Override
     public User edit(User user) {
         try {
-            userFacade.create( passwordService.encrypt(user) );
+            userFacade.edit( passwordService.encrypt(user) );
         } catch (EntityExistsException e) {
             // TODO: Should we change the return type or should we throw exception?
             user = null;
