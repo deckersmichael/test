@@ -42,5 +42,12 @@ public class UserSettingsService implements UserSettingsServiceLocal {
         }
         return user;
     }
+
+    @Override
+    public boolean checkPassword(String cleartext, String encrypted) {
+        return passwordService.checkPassword(cleartext, encrypted);
+    }
+    
+    
     
 }

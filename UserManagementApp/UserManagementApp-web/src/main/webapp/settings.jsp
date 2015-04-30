@@ -29,13 +29,13 @@
                 <input type="text" name="lastName" id="inputLN" class="form-control" placeholder="Last name" value="${user.lastName}" required>
                 <br>
                 <label for="newPassword" class="sr-only">New password</label>
-                <input type="password" name="New Password" id="newPassword" class="form-control" placeholder="newPassword">
+                <input type="password" name="newPassword" id="newPassword" class="form-control" placeholder="New Password">
                 <br>
                 <label for="confirmPassword" class="sr-only">Confirm new password</label>
-                <input type="password" name="Confirm Password" id="confirmPassword" class="form-control" placeholder="confirmPassword">
+                <input type="password" name="confirmPassword" id="confirmPassword" class="form-control" placeholder="Confirm Password">
                 <br>
                 <label for="currentPassword" class="sr-only">Enter current password (to confirm)</label>
-                <input type="password" name="Current Password" id="currentPassword" class="form-control" placeholder="currentPassword" required>
+                <input type="password" name="currentPassword" id="currentPassword" class="form-control" placeholder="Current Password" required>
                 <br>
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Submit changes</button>
             </form>

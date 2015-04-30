@@ -25,8 +25,8 @@ import ua.group06.persistence.User;
 public class UserSettings extends HttpServlet {
     @EJB
     private UserSettingsServiceLocal userService;
-    /*@EJB
-    private UserAuthenticationServiceLocal authService;*/
+    @EJB
+    private UserAuthenticationServiceLocal authService;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -77,41 +77,47 @@ public class UserSettings extends HttpServlet {
         String confirmPassword = request.getParameter("confirmPassword");
         String currentPassword = request.getParameter("currentPassword");
         
-        /*user = authService.authenticate(email, currentPassword);
-        if(user!=null){*/
-            User newInfo = new User();
-            newInfo.setEmail(email);
-            newInfo.setId(user.getId());
+        //user = authService.authenticate(email, currentPassword);
+        if(userService.checkPassword(currentPassword ,user.getPassword())){
+            //User newInfo = new User();
+            //newInfo.setEmail(email);
+            //newInfo.setId(user.getId());
 
             if(fname!=null && !fname.isEmpty()){
-                newInfo.setFirstName(fname);
+                user.setFirstName(fname);
             }
-            else{
+            /*else{
                 newInfo.setFirstName(user.getFirstName());
-            }
+            }*/
 
             if(lname!=null && !lname.isEmpty()){
-                newInfo.setLastName(lname);
+                user.setLastName(lname);
             }
-            else{
+            /*else{
                 newInfo.setLastName(user.getLastName());
-            }
-
-            if(newPassword!=null && confirmPassword!=null && !newPassword.isEmpty() && !newPassword.isEmpty()){
+            }*/
+            System.err.println(user.getPassword());
+            System.err.println(newPassword);
+            System.err.println(confirmPassword);
+            if((newPassword!=null && confirmPassword!=null) && (!newPassword.isEmpty() && !confirmPassword.isEmpty())){
                 if(!newPassword.equals(confirmPassword)){
                     request.setAttribute("message", "The new passwords do not match");
                 }
                 else{
-                    newInfo.setPassword(newPassword);
+                    user.setPassword(newPassword);
+                    System.err.println("ik ben aan het veranderen");
+                    System.err.println(userService.editPassword(user).getPassword());
                 }
             }
             else{
-                newInfo.setPassword(user.getPassword());
+                System.err.println("ik ben nie aan het veranderen");
+               System.err.println(userService.edit(user).getPassword());
             }
-            User sessionUser = userService.edit(newInfo);
-            session.setAttribute("user", sessionUser);
+            /*else{
+                newInfo.setPassword(user.getPassword());
+            }*/
 
-        //}
+        }
        
         
         response.sendRedirect("settings");
