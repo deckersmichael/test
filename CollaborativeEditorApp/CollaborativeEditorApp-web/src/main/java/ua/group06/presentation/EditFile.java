@@ -45,6 +45,7 @@ public class EditFile extends HttpServlet {
             User user = ServletUtil.currentUser(request);
             File file = fileService.show(fid, user);
             request.setAttribute("file", file);
+            request.setAttribute("user", user);
             request.getRequestDispatcher("file.jsp").forward(request, response);
         } else {
             response.sendRedirect("homepage");

@@ -19,16 +19,26 @@ public class FileUpdate implements Serializable {
     private Long fileId;
     private String token;
     private String content;
+    private String email;
 
     public FileUpdate() {
     }
 
-    public FileUpdate(Long id, String token, String content) {
+    public FileUpdate(Long id, String token, String email, String content) {
         this.fileId = id;
         this.token = token;
         this.content = content;
+        this.email = email;
     }
 
+    public String getEmail() {
+        return email;
+    }
+    
+    public void setEmail(String email){
+        this.email = email;
+    }
+    
     public String getToken() {
         return token;
     }

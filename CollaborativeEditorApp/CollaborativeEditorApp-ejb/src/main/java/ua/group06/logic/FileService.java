@@ -44,13 +44,13 @@ public class FileService implements FileServiceLocal {
 
     @Override
     public List<File> filesForUser(User user) {
-        return fileFacade.findAllForUser(user.getId());
+        return fileFacade.findAllForUser(user.getId(), user.getEmail());
     }
 
     @Override
     public File show(Long fid, User user) {
         File file = fileFacade.find(fid);
-        return allowed(file, user) ? file : null;
+        return allowedFile(fid, user) ? file : null;
     }
 
     @Override
@@ -73,9 +73,9 @@ public class FileService implements FileServiceLocal {
     // Update file content if user is allowed to edit given file.
     // This is used by web service.
     @Override
-    public void updateContent(Long fid, String token, String content) {
+    public void updateContent(Long fid, String token, String email, String content) {
         File file = fileFacade.find(fid);
-        if (allowedToEdit(token, file.getUserId())) {
+        if (allowedToEdit(token, email, file)) {
             file.setContent(content);
             fileFacade.edit(file);
         }
@@ -93,7 +93,7 @@ public class FileService implements FileServiceLocal {
      * @return whether the user can modify
      */
     private boolean allowedFile(Long fid, User user) {
-        return this.show(fid, user).getUserId().equals(user.getId());
+        return fileFacade.find(fid).getUserId().equals(user.getId()) || fileFacade.find(fid).getCollabIds().contains(user.getEmail());
     }
 
     private boolean allowed(File file, User user) {
@@ -101,9 +101,9 @@ public class FileService implements FileServiceLocal {
     }
 
     // Check if user is allowed to edit given file.
-    private boolean allowedToEdit(String token, Long uid) {
+    private boolean allowedToEdit(String token, String email, File file) {
         Session session = sessionService.findByToken(token);
-        return session.getUserId().equals(uid);
+        return file.getUserId().equals(session.getUserId()) || file.getCollabIds().contains(email);
     }
 
     @Override

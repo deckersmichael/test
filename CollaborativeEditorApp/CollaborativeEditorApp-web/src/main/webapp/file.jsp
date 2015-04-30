@@ -20,7 +20,8 @@
         <script>
             var Info = {
                 fileId: ${file.id},
-                token: "${session.token}"
+                token: "${session.token}",
+                email: "${user.email}"
             };
         </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.9/ace.js" type="text/javascript" charset="utf-8"></script>

@@ -43,7 +43,7 @@ $(document).ready(function () {
     var handleUpdate = function () {
         var content = editor.getValue();
         if (content !== shadowContent) {
-            var data = {fileId: Info.fileId, token: Info.token, content: content};
+            var data = {fileId: Info.fileId, token: Info.token, email: Info.email, content: content};
             sendUpdate(data);
         }
     };
