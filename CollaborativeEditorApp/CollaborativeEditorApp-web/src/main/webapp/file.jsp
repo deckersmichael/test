@@ -12,6 +12,9 @@
         <div id="editor-header">
             ${file.name} <span id="editor-notification">(Saved)</span>
         </div>
+        <div id="collab-button">
+            <a role="button" class="btn btn-default btn-xs" href="shares?id=${file.id}">Share...</a>
+        </div>
         <input type="hidden" name="content" id="inputContent" value="${file.content}">
         <div id="editor">${file.content}</div>
         <script>

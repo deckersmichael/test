@@ -107,13 +107,19 @@ public class FileService implements FileServiceLocal {
     }
 
     @Override
-    public void updateCollabs(Long fid, User user, boolean edit, String email) {
+    public void updateCollabs(Long fid, User user, boolean edit, String email, boolean add) {
         File file = fileFacade.find(fid);
         if (allowedFile(fid, user)) {
             if (edit)
-                file.addCollaborator(email);
+                if (add)
+                    file.addCollaborator(email);
+                else
+                    file.removeCollaborator(email);
             else 
-                file.addSpectator(email);
+                if (add)
+                    file.addSpectator(email);
+                else
+                    file.removeSpectator(email);  
             fileFacade.edit(file);
         }
     }

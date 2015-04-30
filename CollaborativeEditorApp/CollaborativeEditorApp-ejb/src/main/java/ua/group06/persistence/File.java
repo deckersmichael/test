@@ -6,6 +6,8 @@
 package ua.group06.persistence;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,7 +24,7 @@ import javax.validation.constraints.NotNull;
 @NamedQueries({
     @NamedQuery(
             name="File.findAllForUser",
-            query="SELECT f FROM File f WHERE f.userId = :uid")
+            query="SELECT f FROM File f WHERE f.ownerId = :uid")
 })
 public class File implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -30,7 +32,11 @@ public class File implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotNull
-    private Long userId;
+    private Long ownerId;
+    @NotNull
+    private List<String> collabIds;
+    @NotNull
+    private List<String> spectatorIds;
     @NotNull
     private String name;
     @NotNull
@@ -39,17 +45,43 @@ public class File implements Serializable {
     public File () {}
     
     public File(Long userId, String name, String content) {
-        this.userId = userId;
+        this.ownerId = userId;
         this.name = name;
         this.content = content;
+        this.collabIds = new ArrayList<>();
+        this.spectatorIds = new ArrayList<>();
+    }
+    
+    public void addCollaborator(String email) {
+        this.collabIds.add(email);
+    }
+    
+    public boolean removeCollaborator(String email) {
+        return collabIds.remove(email);
+    }
+    
+    public List<String> getCollaborators() {
+        return this.collabIds;
+    }
+    
+    public void addSpectator(String id) {
+        this.spectatorIds.add(id);
+    }
+    
+    public boolean removeSpectator(String email) {
+        return spectatorIds.remove(email);
+    }
+        
+    public List<String> getSpectators() {
+        return this.spectatorIds;
     }
     
     public Long getUserId() {
-        return userId;
+        return ownerId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserId(Long ownerId) {
+        this.ownerId = ownerId;
     }
 
     public String getName() {

@@ -31,6 +31,6 @@ public interface FileServiceLocal {
 
     void updateContent(Long fid, String token, String content);
     
-    void updateCollabs(Long fid, User user, boolean edit, String email);
+    void updateCollabs(Long fid, User user, boolean edit, String email, boolean add);
     
 }
