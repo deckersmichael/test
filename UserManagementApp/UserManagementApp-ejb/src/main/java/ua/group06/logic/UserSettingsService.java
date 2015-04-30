@@ -27,6 +27,7 @@ public class UserSettingsService implements UserSettingsServiceLocal {
             userFacade.edit( passwordService.encrypt(user) );
         } catch (EntityExistsException e) {
             // TODO: Should we change the return type or should we throw exception?
+            System.err.println("in exception");
             user = null;
         }
         return user;

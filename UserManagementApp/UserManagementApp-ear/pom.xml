@@ -9,7 +9,6 @@
 
     <groupId>ua.group06</groupId>
     <artifactId>UserManagementApp-ear</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>ear</packaging>
 
     <name>UserManagementApp-ear</name>

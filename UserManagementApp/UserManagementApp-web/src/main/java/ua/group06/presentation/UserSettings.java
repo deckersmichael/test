@@ -81,22 +81,23 @@ public class UserSettings extends HttpServlet {
         if(user!=null){*/
             User newInfo = new User();
             newInfo.setEmail(email);
+            newInfo.setId(user.getId());
 
-             if(fname!=null){
-                 newInfo.setFirstName(fname);
-             }
-             else{
-                 newInfo.setFirstName(user.getFirstName());
-             }
+            if(fname!=null && !fname.isEmpty()){
+                newInfo.setFirstName(fname);
+            }
+            else{
+                newInfo.setFirstName(user.getFirstName());
+            }
 
-             if(lname!=null){
-                 newInfo.setLastName(lname);
-             }
-             else{
-                 newInfo.setLastName(user.getLastName());
-             }
+            if(lname!=null && !lname.isEmpty()){
+                newInfo.setLastName(lname);
+            }
+            else{
+                newInfo.setLastName(user.getLastName());
+            }
 
-            if(newPassword!=null && confirmPassword!=null){
+            if(newPassword!=null && confirmPassword!=null && !newPassword.isEmpty() && !newPassword.isEmpty()){
                 if(!newPassword.equals(confirmPassword)){
                     request.setAttribute("message", "The new passwords do not match");
                 }
@@ -107,8 +108,8 @@ public class UserSettings extends HttpServlet {
             else{
                 newInfo.setPassword(user.getPassword());
             }
-             User sessionUser = userService.edit(newInfo);
-             session.setAttribute("user", sessionUser);
+            User sessionUser = userService.edit(newInfo);
+            session.setAttribute("user", sessionUser);
 
         //}
        
