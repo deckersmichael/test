@@ -24,7 +24,7 @@ public class UserAuthenticationService implements UserAuthenticationServiceLocal
     @Override
     // Exceptions for errors? Constant null cecking is bad.
     public User authenticate(String email, String password) {
-        User user = userFacade.findByEmail(email);
+        User user = (User)userFacade.findByEmail(email);
         if (user == null) { return null; }
         String encryptedPassword = user.getPassword();
         boolean matching = passwordService.checkPassword(password, encryptedPassword);

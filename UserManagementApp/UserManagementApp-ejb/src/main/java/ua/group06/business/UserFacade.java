@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import ua.group06.persistence.AbstractUser;
 import ua.group06.persistence.User;
 
 /**
@@ -16,7 +17,7 @@ import ua.group06.persistence.User;
  * @author matson
  */
 @Stateless
-public class UserFacade extends AbstractFacade<User> implements UserFacadeLocal {
+public class UserFacade extends AbstractFacade<AbstractUser> implements UserFacadeLocal {
     @PersistenceContext(unitName = "ua.group06_UserManagementApp-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -26,11 +27,11 @@ public class UserFacade extends AbstractFacade<User> implements UserFacadeLocal 
     }
 
     public UserFacade() {
-        super(User.class);
+        super(AbstractUser.class);
     }
 
     @Override
-    public User findByEmail(String email) {
+    public AbstractUser findByEmail(String email) {
         List results = em.createNamedQuery(
                 "User.findByEmail")
                 .setParameter("email", email)

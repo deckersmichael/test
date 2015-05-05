@@ -35,7 +35,7 @@ public class UserService extends RestResource {
     @GET
     @Path("{id}")
     public Response find(@PathParam("id") Long id) {
-        User user = userFacade.find(id);
+        User user = (User)userFacade.find(id);
         return Response.ok(user).build();
     }
     

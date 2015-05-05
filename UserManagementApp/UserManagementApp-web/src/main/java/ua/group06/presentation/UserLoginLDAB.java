@@ -6,28 +6,36 @@
 package ua.group06.presentation;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.json.stream.JsonParser;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import ua.group06.logic.ExternalUserServiceLocal;
+import ua.group06.logic.RestUserClient;
 import ua.group06.logic.UserAuthenticationServiceLocal;
+import ua.group06.persistence.AbstractUser;
 import ua.group06.persistence.User;
 
 /**
  *
- * @author matson
+ * @author Yves Maris
  */
-@WebServlet(name = "UserLogin", urlPatterns = {"/login"})
-public class UserLogin extends HttpServlet {
+@WebServlet(name = "UserLoginLDAB", urlPatterns = {"/loginLDAB"})
+public class UserLoginLDAB extends HttpServlet {
+    RestUserClient restClient;
     @EJB
-    private UserAuthenticationServiceLocal authService;
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
+    private ExternalUserServiceLocal userService;
+     /**
      * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
@@ -52,15 +60,29 @@ public class UserLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.err.println("In login");
-        String email    = request.getParameter("email");
+        String login    = request.getParameter("email");
         String password = request.getParameter("password");
-        User user = authService.authenticate(email, password);
-        if (user != null) {
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user);
+        JSONArray userinfo = restClient.LDABlogin(login, password);
+        //System.err.println(parser);
+        if(userinfo!=null){
+            
+            try {
+                if(userinfo.get(0).toString().equals("01")){
+                    String fname = userinfo.get(2).toString();
+                    String lname = userinfo.get(3).toString();
+                    String email = userinfo.get(4).toString();
+                    AbstractUser user = userService.authenticateOrCreate(email, fname, lname);
+                    if (user != null) {
+                        HttpSession session = request.getSession();
+                        session.setAttribute("user", user);
+                    }
+                }
+            } catch (JSONException ex) {
+                //response.sendRedirect("homepage");
+            }
         }
         response.sendRedirect("homepage");
+       
     }
 
     /**
@@ -72,5 +94,5 @@ public class UserLogin extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+    
 }

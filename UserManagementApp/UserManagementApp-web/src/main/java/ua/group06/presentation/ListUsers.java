@@ -80,7 +80,7 @@ public class ListUsers extends HttpServlet {
         } else if ("Delete".equalsIgnoreCase(action)) {
             userFacade.remove(user);
         } else if ("Search".equalsIgnoreCase(action)) {
-            user = userFacade.findByEmail(email);
+            user = (User) userFacade.findByEmail(email);
         }
         request.setAttribute("user", user);
         processRequest(request, response);

@@ -22,10 +22,12 @@
             <form class="form-signin" action="./login" method="POST">
                 <h2 class="form-signin-heading">Please sign in</h2>
                 <label for="inputEmail" class="sr-only">Email address</label>
-                <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                <input type="text" name="email" id="inputEmail" class="form-control" placeholder="Email address or LDAB login" required autofocus>
                 <label for="inputPassword" class="sr-only">Password</label>
                 <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                <button class="btn btn-lg btn-primary btn-block" value="standard" type="submit">Sign in</button>
+                <button class="btn btn-lg btn-primary btn-block" value="LDAB" onclick="form.action='./loginLDAB';" type="submit">Sign in with LDAB</button>
+                <button class="btn btn-lg btn-primary btn-block" value="FB" value="SecondServlet" onclick="form.action='./loginTwitter';" type="submit">Sign in with facebook</button>
             </form>
             <br>
             <p class="text-center">No account yet? <a href="registration">Register now!</a></p>

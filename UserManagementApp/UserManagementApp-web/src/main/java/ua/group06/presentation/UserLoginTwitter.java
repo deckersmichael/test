@@ -5,29 +5,33 @@
  */
 package ua.group06.presentation;
 
+
 import java.io.IOException;
-import java.io.PrintWriter;
+
 import javax.ejb.EJB;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import ua.group06.logic.UserAuthenticationServiceLocal;
-import ua.group06.persistence.User;
+
+import ua.group06.logic.ExternalUserServiceLocal;
+import ua.group06.logic.RestUserClient;
+import twitter4j.*;
+import twitter4j.auth.OAuth2Token;
+import twitter4j.conf.ConfigurationBuilder;
 
 /**
  *
- * @author matson
+ * @author Yves Maris
  */
-@WebServlet(name = "UserLogin", urlPatterns = {"/login"})
-public class UserLogin extends HttpServlet {
+@WebServlet(name = "UserLoginFB", urlPatterns = {"/loginTwitter"})
+public class UserLoginTwitter extends HttpServlet {
+    RestUserClient restClient;
     @EJB
-    private UserAuthenticationServiceLocal authService;
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
+    private ExternalUserServiceLocal userService;
+     /**
      * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
@@ -52,15 +56,20 @@ public class UserLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.err.println("In login");
         String email    = request.getParameter("email");
         String password = request.getParameter("password");
-        User user = authService.authenticate(email, password);
-        if (user != null) {
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-        }
-        response.sendRedirect("homepage");
+        OAuth2Token token;
+        //token = getOAuth2Token();
+
+        ConfigurationBuilder cb = new ConfigurationBuilder();
+
+        cb.setApplicationOnlyAuthEnabled(true);
+        cb.setOAuthConsumerKey("xYANYnNIbrnOH2XREtJgK4Iki");
+        cb.setOAuthConsumerSecret("WmNSUtkJAjZAGTSsRRdlROQqnztGeRHQGbzqzIyxekCj5tFqO8");
+ //       cb.setOAuth2TokenType(token.getTokenType());
+ //       cb.setOAuth2AccessToken(token.getAccessToken());
+
+        Twitter twitter = new TwitterFactory(cb.build()).getInstance();
     }
 
     /**
@@ -71,6 +80,5 @@ public class UserLogin extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }

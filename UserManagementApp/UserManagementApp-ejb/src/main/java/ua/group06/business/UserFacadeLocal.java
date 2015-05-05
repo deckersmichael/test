@@ -7,6 +7,7 @@ package ua.group06.business;
 
 import java.util.List;
 import javax.ejb.Local;
+import ua.group06.persistence.AbstractUser;
 import ua.group06.persistence.User;
 
 /**
@@ -16,20 +17,20 @@ import ua.group06.persistence.User;
 @Local
 public interface UserFacadeLocal {
 
-    void create(User user);
+    void create(AbstractUser user);
 
-    void edit(User user);
+    void edit(AbstractUser user);
 
-    void remove(User user);
+    void remove(AbstractUser user);
 
-    User find(Object id);
+    AbstractUser find(Object id);
 
-    List<User> findAll();
+    List<AbstractUser> findAll();
 
-    List<User> findRange(int[] range);
+    List<AbstractUser> findRange(int[] range);
 
     int count();
 
-    User findByEmail(String email);
+    AbstractUser findByEmail(String email);
     
 }
