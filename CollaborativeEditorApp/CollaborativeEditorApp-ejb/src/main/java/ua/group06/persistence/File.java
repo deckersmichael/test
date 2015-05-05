@@ -7,6 +7,7 @@ package ua.group06.persistence;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -24,7 +26,10 @@ import javax.validation.constraints.NotNull;
 @NamedQueries({
     @NamedQuery(
             name="File.findAllForUser",
-            query="SELECT f FROM File f WHERE f.ownerId = :uid")
+            query="SELECT f FROM File f WHERE f.ownerId = :uid"),
+    @NamedQuery(
+            name="File.findAllForCollabs",
+            query="SELECT f FROM File f WHERE :uemail MEMBER OF f.collabIds")
 })
 public class File implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -33,35 +38,48 @@ public class File implements Serializable {
     private Long id;
     @NotNull
     private Long ownerId;
-    @NotNull
-    private List<String> collabIds;
-    @NotNull
+    @OneToMany
+    private Collection<PersistString> collabIds;
     private List<String> spectatorIds;
     @NotNull
     private String name;
     @NotNull
     private String content;
 
+    public ArrayList<String> getCollabIds() {
+        ArrayList<String> ret = new ArrayList<String>();
+        for (PersistString ps : this.collabIds){
+            ret.add(ps.getContent());
+        }
+        return ret;
+    }
+
+    public void _persistency_set_collabIds() {
+        this.collabIds = collabIds;
+    }
+
+    
+    
     public File () {}
     
     public File(Long userId, String name, String content) {
         this.ownerId = userId;
         this.name = name;
         this.content = content;
-        this.collabIds = new ArrayList<>();
+        this.collabIds = new ArrayList<PersistString>();
         this.spectatorIds = new ArrayList<>();
     }
     
     public void addCollaborator(String email) {
-        this.collabIds.add(email);
+        this.collabIds.add(new PersistString(email));
     }
     
     public boolean removeCollaborator(String email) {
         return collabIds.remove(email);
     }
     
-    public List<String> getCollaborators() {
-        return this.collabIds;
+    public Collection<String> getCollaborators() {
+        return this.getCollabIds();
     }
     
     public void addSpectator(String id) {
