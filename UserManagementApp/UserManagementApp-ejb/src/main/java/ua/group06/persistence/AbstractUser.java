@@ -39,11 +39,11 @@ public class AbstractUser {
     @Column(name="LASTNAME")
     private String lastName;
     @NotNull
-    @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
+    /*@Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
             + "[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
-            + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9]"
+            + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)*+[a-z0-9]"
             + "(?:[a-z0-9-]*[a-z0-9])?",
-            message = "{invalid.email}")
+            message = "{invalid.email}")*/
     private String email;
     
     public AbstractUser(){}

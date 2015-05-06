@@ -62,7 +62,9 @@ public class UserLoginLDAB extends HttpServlet {
             throws ServletException, IOException {
         String login    = request.getParameter("email");
         String password = request.getParameter("password");
+        restClient=new RestUserClient();
         JSONArray userinfo = restClient.LDABlogin(login, password);
+        //System.err.println(login +" "+ password);
         //System.err.println(parser);
         if(userinfo!=null){
             

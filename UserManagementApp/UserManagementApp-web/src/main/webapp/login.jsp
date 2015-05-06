@@ -27,7 +27,7 @@
                 <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
                 <button class="btn btn-lg btn-primary btn-block" value="standard" type="submit">Sign in</button>
                 <button class="btn btn-lg btn-primary btn-block" value="LDAB" onclick="form.action='./loginLDAB';" type="submit">Sign in with LDAB</button>
-                <button class="btn btn-lg btn-primary btn-block" value="FB" value="SecondServlet" onclick="form.action='./loginTwitter';" type="submit">Sign in with facebook</button>
+                <button class="btn btn-lg btn-primary btn-block" value="Twitter" value="SecondServlet" onclick="form.action='./loginTwitter';" type="submit">Sign in with twitter</button>
             </form>
             <br>
             <p class="text-center">No account yet? <a href="registration">Register now!</a></p>
