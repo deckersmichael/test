@@ -22,11 +22,6 @@ import javax.validation.constraints.Pattern;
  */
 @Entity
 @Table(name="USERS")
-@NamedQueries({
-    @NamedQuery(
-            name="User.findByEmail",
-            query="SELECT u FROM User u WHERE u.email LIKE :email")
-})
 public class AbstractUser {
     private static final long serialVersionUID = 1L;
     @Id
@@ -38,20 +33,20 @@ public class AbstractUser {
     @NotNull
     @Column(name="LASTNAME")
     private String lastName;
-    @NotNull
+    //@NotNull
     /*@Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
             + "[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
             + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)*+[a-z0-9]"
             + "(?:[a-z0-9-]*[a-z0-9])?",
             message = "{invalid.email}")*/
-    private String email;
+   // private String email;
     
     public AbstractUser(){}
     
-    public AbstractUser(String fname, String lname, String email) {
+    public AbstractUser(String fname, String lname/*, String email*/) {
         this.firstName = fname;
         this.lastName = lname;
-        this.email = email;
+        //this.email = email;
     }
     
     public String fullName() {
@@ -72,14 +67,6 @@ public class AbstractUser {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public Long getId() {

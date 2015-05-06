@@ -7,15 +7,22 @@ package ua.group06.rest;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
+import org.json.JSONArray;
+import org.json.JSONException;
 import ua.group06.business.UserFacadeLocal;
+import ua.group06.logic.ExternalUserServiceLocal;
+import ua.group06.logic.RestUserClient;
 import ua.group06.logic.UserAuthenticationServiceLocal;
 import ua.group06.logic.UserRegistrationServiceLocal;
+import ua.group06.persistence.AbstractUser;
+import ua.group06.persistence.ExternalUser;
 import ua.group06.persistence.User;
 
 /**
@@ -31,6 +38,8 @@ public class UserService extends RestResource {
     private UserAuthenticationServiceLocal authService;
     @EJB
     private UserFacadeLocal userFacade;
+    @EJB
+    private ExternalUserServiceLocal externalUserService;
 
     @GET
     @Path("{id}")
@@ -50,6 +59,32 @@ public class UserService extends RestResource {
     public Response login(@QueryParam("email") String email,
                           @QueryParam("password") String password) {
         User foundUser = authService.authenticate(email, password);
+        return Response.ok(foundUser).build();
+    }
+    
+    @GET
+    @Path("loginLDAB")
+    public Response loginLDAB(@QueryParam("login") String login,
+                          @QueryParam("password") String password) {
+        
+        RestUserClient restClient=new RestUserClient();
+        JSONArray userinfo = restClient.LDABlogin(login, password);
+        //System.err.println(login +" "+ password);
+        //System.err.println(parser);
+        ExternalUser foundUser = null;
+        if(userinfo!=null){
+            
+            try {
+                if(userinfo.get(0).toString().equals("01")){
+                    String fname = userinfo.get(2).toString();
+                    String lname = userinfo.get(3).toString();
+                    String email = userinfo.get(4).toString();
+                    foundUser = externalUserService.authenticateOrCreate(login, email, fname, lname);
+                }
+            } catch (JSONException ex) {
+                //response.sendRedirect("homepage");
+            }
+        }
         return Response.ok(foundUser).build();
     }
 

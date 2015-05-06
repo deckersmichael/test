@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import ua.group06.persistence.AbstractUser;
+import ua.group06.persistence.ExternalUser;
 import ua.group06.persistence.User;
 
 /**
@@ -36,7 +37,16 @@ public class UserFacade extends AbstractFacade<AbstractUser> implements UserFaca
                 "User.findByEmail")
                 .setParameter("email", email)
                 .getResultList();
-        return results.isEmpty() ? null : (User) results.get(0);
+        return results.isEmpty() ? null : (AbstractUser) results.get(0);
+    }
+    
+    @Override
+    public ExternalUser findByUsername(String username) {
+        List results = em.createNamedQuery(
+                "ExternalUser.findByUsername")
+                .setParameter("username", username)
+                .getResultList();
+        return results.isEmpty() ? null : (ExternalUser) results.get(0);
     }
     
 }

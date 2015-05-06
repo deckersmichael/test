@@ -23,10 +23,10 @@ public class ExternalUserService implements ExternalUserServiceLocal{
     private UserFacadeLocal userFacade;
 
     @Override
-    public AbstractUser authenticateOrCreate(String email, String firstName, String lastName) {
-       AbstractUser user = userFacade.findByEmail(email);
+    public ExternalUser authenticateOrCreate(String username, String email, String firstName, String lastName) {
+        ExternalUser user = userFacade.findByUsername(username);
        if (user == null){
-           user = new ExternalUser(firstName, lastName, email);
+           user = new ExternalUser(username, firstName, lastName, email);
            try {
             userFacade.create( user );
         } catch (EntityExistsException e) {
@@ -36,6 +36,4 @@ public class ExternalUserService implements ExternalUserServiceLocal{
        }
        return user;
     }
-
-   
 }

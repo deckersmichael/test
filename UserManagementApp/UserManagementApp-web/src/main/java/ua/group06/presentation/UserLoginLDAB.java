@@ -73,7 +73,7 @@ public class UserLoginLDAB extends HttpServlet {
                     String fname = userinfo.get(2).toString();
                     String lname = userinfo.get(3).toString();
                     String email = userinfo.get(4).toString();
-                    AbstractUser user = userService.authenticateOrCreate(email, fname, lname);
+                    AbstractUser user = userService.authenticateOrCreate(login, email, fname, lname);
                     if (user != null) {
                         HttpSession session = request.getSession();
                         session.setAttribute("user", user);

@@ -8,6 +8,7 @@ package ua.group06.business;
 import java.util.List;
 import javax.ejb.Local;
 import ua.group06.persistence.AbstractUser;
+import ua.group06.persistence.ExternalUser;
 import ua.group06.persistence.User;
 
 /**
@@ -32,5 +33,7 @@ public interface UserFacadeLocal {
     int count();
 
     AbstractUser findByEmail(String email);
+    
+    ExternalUser findByUsername(String username);
     
 }

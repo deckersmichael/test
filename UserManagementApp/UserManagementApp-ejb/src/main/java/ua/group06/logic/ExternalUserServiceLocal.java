@@ -7,6 +7,7 @@ package ua.group06.logic;
 
 import javax.ejb.Local;
 import ua.group06.persistence.AbstractUser;
+import ua.group06.persistence.ExternalUser;
 import ua.group06.persistence.User;
 
 /**
@@ -15,5 +16,5 @@ import ua.group06.persistence.User;
  */
 @Local
 public interface ExternalUserServiceLocal {
-     AbstractUser authenticateOrCreate(String email, String firstName, String lastName);
+     ExternalUser authenticateOrCreate(String username, String email, String firstName, String lastName);
 }
