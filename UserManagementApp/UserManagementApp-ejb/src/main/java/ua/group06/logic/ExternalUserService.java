@@ -26,6 +26,7 @@ public class ExternalUserService implements ExternalUserServiceLocal{
     public ExternalUser authenticateOrCreate(String username, String email, String firstName, String lastName) {
         ExternalUser user = userFacade.findByUsername(username);
        if (user == null){
+           System.err.println("Creating new user " + firstName + lastName);
            user = new ExternalUser(username, firstName, lastName, email);
            try {
             userFacade.create( user );

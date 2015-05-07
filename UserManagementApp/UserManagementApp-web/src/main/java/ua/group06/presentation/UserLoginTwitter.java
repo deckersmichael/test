@@ -62,15 +62,15 @@ public class UserLoginTwitter extends HttpServlet {
             String fullName = twitterUser.getName();
             String fName="";
             String lName="";
-            String[] names = fullName.split(lName);
+            String[] names = fullName.split(" ");
             if(names.length==1){
                 fName=names[0];
             }
-            else if(names.length==2){
+            else if(names.length>=2){
                 fName=names[0];
-                lName=names[1];
+                lName=names[names.length-1];
             }
-            ExternalUser user = userService.authenticateOrCreate(accessToken.getScreenName(), fName, lName, "");
+            ExternalUser user = userService.authenticateOrCreate(accessToken.getScreenName(),"" ,fName, lName);
             
             if (user != null) {
                 HttpSession session = request.getSession();
