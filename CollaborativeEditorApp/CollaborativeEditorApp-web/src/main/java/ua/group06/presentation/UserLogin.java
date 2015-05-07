@@ -57,7 +57,14 @@ public class UserLogin extends HttpServlet {
             throws ServletException, IOException {
         String email    = request.getParameter("email");
         String password = request.getParameter("password");
-        User user = userService.login(email, password);
+        String type = request.getParameter("confirm");
+        User user = null;
+        if(type.equals("Standard")){
+            user = userService.login(email, password);
+        }
+        else if(type.equals("LDAB")){
+            user = userService.loginLDAB(email, password);
+        }
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
