@@ -35,7 +35,6 @@ public class RestUserClient {
     
     
     public JSONArray LDABlogin(String user, String password) {
-        System.err.println("test");
         Base64.Encoder encoder = Base64.getEncoder();
         String encodedUser = encoder.encodeToString(user.getBytes());
         String encodedPassword = encoder.encodeToString(password.getBytes());
@@ -45,7 +44,6 @@ public class RestUserClient {
         Invocation inv = resourceTarget.queryParam("user", encodedUser).queryParam("password", encodedPassword).request("application/json").buildGet();
         String response = inv.invoke(String.class);
         JSONArray  result = null;
-        System.err.println(response);
         try {
             result = new JSONArray(response);
         } catch (JSONException ex) {
