@@ -22,6 +22,8 @@ import ua.group06.persistence.Session;
 public class FileService implements FileServiceLocal {
 
     @EJB
+    private MergeBeanLocal merge;
+    @EJB
     private FileFacadeLocal fileFacade;
     @EJB
     private SessionServiceLocal sessionService;
@@ -57,6 +59,7 @@ public class FileService implements FileServiceLocal {
     public void update(Long id, User user, String content) {
         File file = fileFacade.find(id);
         if (allowedFile(id, user)) {
+            //String result = merge.getUpdatedFile(content);
             file.setContent(content);
             fileFacade.edit(file);
         }
@@ -73,12 +76,13 @@ public class FileService implements FileServiceLocal {
     // Update file content if user is allowed to edit given file.
     // This is used by web service.
     @Override
-    public void updateContent(Long fid, String token, String email, String content) {
+    public String updateContent(Long fid, String token, String email, String content, String changes) {
         File file = fileFacade.find(fid);
+        String result = null;
         if (allowedToEdit(token, email, file)) {
-            file.setContent(content);
-            fileFacade.edit(file);
+            result = merge.getUpdatedFile(fid, token, email, changes);
         }
+        return result;
     }
 
     private boolean allowedUser(Long uid, User user) {

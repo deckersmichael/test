@@ -28,8 +28,8 @@ public class FileResource extends RestResource {
     @Path("update")
     // TODO: handle errors
     public Response update(FileUpdate changes) {
-        fileService.updateContent(changes.getFileId(), changes.getToken(), changes.getEmail(), changes.getContent());
-        return Response.ok().build();
+        String content = fileService.updateContent(changes.getFileId(), changes.getToken(), changes.getEmail(), changes.getContent(), changes.getChanges());
+        return Response.ok(content).build();
     }
 
 }

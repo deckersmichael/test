@@ -29,7 +29,7 @@ public interface FileServiceLocal {
 
     void delete(Long fid, User user);
 
-    void updateContent(Long fid, String token, String email, String content);
+    String updateContent(Long fid, String token, String email, String content, String changes);
     
     void updateCollabs(Long fid, User user, boolean edit, String email, boolean add);
     

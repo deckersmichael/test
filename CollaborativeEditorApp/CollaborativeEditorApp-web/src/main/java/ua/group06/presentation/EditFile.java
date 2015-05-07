@@ -40,6 +40,7 @@ public class EditFile extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String fidString = request.getParameter("id");
+        
         if (fidString != null) {
             Long fid = Long.parseLong(fidString);
             User user = ServletUtil.currentUser(request);

@@ -10,6 +10,16 @@ $(document).ready(function () {
     var shadowContent = editor.getValue();
     editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/plain_text");
+    var changes = [];
+    
+    editor.getSession().on('change', function(e) {
+        if (e.data.action === "insertText"){
+            changes.push(["insert", e.data.text, [e.data.range.start.column, e.data.range.start.row], [e.data.range.end.column, e.data.range.end.row]])
+        } else {
+            changes.push(["delete", [e.data.range.start.column, e.data.range.start.row], [e.data.range.end.column, e.data.range.end.row]])
+        }
+        console.log(changes);
+    });
 
     var setNotificationValue = function (value) {
         var notifId = "#editor-notification";
@@ -42,11 +52,13 @@ $(document).ready(function () {
 
     var handleUpdate = function () {
         var content = editor.getValue();
+        var changesString = JSON.stringify(changes);
         if (content !== shadowContent) {
-            var data = {fileId: Info.fileId, token: Info.token, email: Info.email, content: content};
+            var data = {fileId: Info.fileId, token: Info.token, email: Info.email, content: content, changes: changesString};
             sendUpdate(data);
         }
+        changes = [];
     };
 
-    setInterval(handleUpdate, 5000);
+    setInterval(handleUpdate, 1000);
 });
