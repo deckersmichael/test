@@ -87,5 +87,12 @@ public class UserService extends RestResource {
         }
         return Response.ok(foundUser).build();
     }
+    
+    @GET
+    @Path("loginTwitter")
+    public Response loginTwitter(@QueryParam("username") String username) {
+        ExternalUser foundUser = externalUserService.authenticateOrCreate(username, "", "", "");
+        return Response.ok(foundUser).build();
+    }
 
 }

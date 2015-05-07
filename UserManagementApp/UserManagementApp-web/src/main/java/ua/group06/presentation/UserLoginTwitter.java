@@ -7,6 +7,7 @@ package ua.group06.presentation;
 
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 import javax.ejb.EJB;
 
@@ -24,6 +25,7 @@ import twitter4j.auth.AccessToken;
 import twitter4j.auth.OAuth2Token;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
+import ua.group06.logic.TwitterAuthentication;
 import ua.group06.persistence.AbstractUser;
 import ua.group06.persistence.ExternalUser;
 
@@ -33,10 +35,7 @@ import ua.group06.persistence.ExternalUser;
  */
 @WebServlet(name = "UserLoginTwitter", urlPatterns = {"/loginTwitter"})
 public class UserLoginTwitter extends HttpServlet {
-    final String CONSUMER_KEY="xYANYnNIbrnOH2XREtJgK4Iki";
-    final String CONSUMER_SECRET="WmNSUtkJAjZAGTSsRRdlROQqnztGeRHQGbzqzIyxekCj5tFqO8";
-    private Twitter twitter;
-    private RequestToken requestToken;
+    TwitterAuthentication twitterauth;
     
     @EJB
     private ExternalUserServiceLocal userService;
@@ -51,7 +50,8 @@ public class UserLoginTwitter extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //Twitter twitter = (Twitter) request.getSession().getAttribute("twitter");
+        Twitter twitter = twitterauth.getTwitter();
+        RequestToken requestToken = twitterauth.getRequestToken();
         //RequestToken requestToken = (RequestToken) request.getSession().getAttribute("requestToken");
         String verifier = request.getParameter("oauth_verifier");
         System.err.println(twitter+ " "+requestToken+ " " +verifier);
@@ -94,31 +94,11 @@ public class UserLoginTwitter extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //String email    = request.getParameter("email");
-        //String password = request.getParameter("password");
-        //System.err.println("test");
-
-        ConfigurationBuilder cb = new ConfigurationBuilder();
-
-       // cb.setApplicationOnlyAuthEnabled(true);
-
-        //cb.setOAuth2TokenType(token.getTokenType());
-        //cb.setOAuth2AccessToken(token.getAccessToken());
-        cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(CONSUMER_KEY)
-                .setOAuthConsumerSecret(CONSUMER_SECRET);
-        Twitter twitter = new TwitterFactory(cb.build()).getInstance();
-        this.twitter=twitter;
-        //request.setAttribute("twitter", twitter);
+        twitterauth=new TwitterAuthentication();
         try {
-            StringBuffer callbackURL = request.getRequestURL();
-            RequestToken requestToken = twitter.getOAuthRequestToken(/*callbackURL.toString()*/);
-            this.requestToken = requestToken;
-            //request.getSession().setAttribute("requestToken", requestToken);
-            response.sendRedirect(requestToken.getAuthenticationURL());
-            
+            response.sendRedirect(twitterauth.getauthenticationURL(/*"http://127.0.0.1:8080/UserManagementApp-web/loginTwitter"*/));
         } catch (TwitterException ex) {
-            System.err.println("Could not access twitter user");
+            java.util.logging.Logger.getLogger(UserLoginTwitter.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
