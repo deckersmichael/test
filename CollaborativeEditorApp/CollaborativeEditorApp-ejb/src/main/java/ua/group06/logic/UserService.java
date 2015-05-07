@@ -26,4 +26,8 @@ public class UserService implements UserServiceLocal {
         return restClient.loginLDAB(username, password);
     }
     
+    public User loginTwitter(String username){
+        return restClient.loginTwitter(username);
+    }
+    
 }

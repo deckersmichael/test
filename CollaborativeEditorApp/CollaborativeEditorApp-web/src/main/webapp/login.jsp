@@ -27,6 +27,9 @@
                 <button class="btn btn-lg btn-primary btn-block" name="confirm" value="Standard" type="submit">Sign in</button>
                 <button class="btn btn-lg btn-primary btn-block" name="confirm" value="LDAB" type="submit">Sign in with LDAB</button>
             </form>
+            <form class="form-signin" action="./loginTwitter" method="POST">
+                <button class="btn btn-lg btn-primary btn-block" value="Twitter" type="submit">Sign in with Twitter</button>
+            </form>
         </div>
     </body>
 </html>

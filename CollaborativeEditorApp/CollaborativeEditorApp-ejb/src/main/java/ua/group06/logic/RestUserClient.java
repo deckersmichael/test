@@ -20,7 +20,6 @@ import ua.group06.entities.User;
  */
 public class RestUserClient {
     private final String ROOT = "http://localhost:8080/UserManagementApp-web/resources/users";
-    private final String LDABROOT = "http://143.129.83.25:8080/LDAPQuery/resources/DC2015";
     
     public User login(String email, String password) {
         Client client = ClientBuilder.newClient();
@@ -41,6 +40,16 @@ public class RestUserClient {
                 .target(ROOT + "/loginLDAB")
                 .queryParam("login", login)
                 .queryParam("password", password)
+                .request(MediaType.APPLICATION_JSON)
+                .get(User.class);
+        return user;
+    }
+    
+    public User loginTwitter(String username) {
+        Client client = ClientBuilder.newClient();
+        User user = client
+                .target(ROOT + "/loginTwitter")
+                .queryParam("username", username)
                 .request(MediaType.APPLICATION_JSON)
                 .get(User.class);
         return user;

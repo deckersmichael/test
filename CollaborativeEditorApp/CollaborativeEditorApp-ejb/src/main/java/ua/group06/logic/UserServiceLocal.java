@@ -17,5 +17,6 @@ public interface UserServiceLocal {
 
     User login(String email, String password);
     public User loginLDAB(String username, String password);
+    public User loginTwitter(String screenName);
     
 }
