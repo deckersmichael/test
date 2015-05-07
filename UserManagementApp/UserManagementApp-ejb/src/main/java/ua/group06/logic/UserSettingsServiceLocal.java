@@ -6,6 +6,7 @@
 package ua.group06.logic;
 
 import javax.ejb.Local;
+import ua.group06.persistence.AbstractUser;
 import ua.group06.persistence.User;
 
 /**
@@ -14,7 +15,7 @@ import ua.group06.persistence.User;
  */
 @Local
 public interface UserSettingsServiceLocal {
-    User edit(User user);
+    AbstractUser edit(AbstractUser user);
     User editPassword(User user);
     boolean checkPassword(String cleartext, String encrypted);
 }

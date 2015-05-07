@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityExistsException;
 import ua.group06.persistence.User;
 import ua.group06.business.UserFacadeLocal;
+import ua.group06.persistence.AbstractUser;
 
 /**
  *
@@ -22,7 +23,7 @@ public class UserSettingsService implements UserSettingsServiceLocal {
     @EJB
     private PasswordEncryptionServiceLocal passwordService;
     @Override
-    public User edit(User user) {
+    public AbstractUser edit(AbstractUser user) {
         try {
             userFacade.edit(user);
         } catch (EntityExistsException e) {

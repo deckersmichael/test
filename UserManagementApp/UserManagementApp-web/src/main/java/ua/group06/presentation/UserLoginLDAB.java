@@ -6,11 +6,7 @@
 package ua.group06.presentation;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.json.stream.JsonParser;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,12 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import ua.group06.logic.ExternalUserServiceLocal;
 import ua.group06.logic.RestUserClient;
-import ua.group06.logic.UserAuthenticationServiceLocal;
-import ua.group06.persistence.AbstractUser;
-import ua.group06.persistence.User;
+import ua.group06.persistence.ExternalUser;
 
 /**
  *
@@ -73,7 +66,7 @@ public class UserLoginLDAB extends HttpServlet {
                     String fname = userinfo.get(2).toString();
                     String lname = userinfo.get(3).toString();
                     String email = userinfo.get(4).toString();
-                    AbstractUser user = userService.authenticateOrCreate(login, email, fname, lname);
+                    ExternalUser user = userService.authenticateOrCreate(login, email, fname, lname);
                     if (user != null) {
                         HttpSession session = request.getSession();
                         session.setAttribute("user", user);

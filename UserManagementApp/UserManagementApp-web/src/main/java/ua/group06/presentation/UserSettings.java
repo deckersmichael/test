@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import ua.group06.logic.UserAuthenticationServiceLocal;
 import ua.group06.logic.UserSettingsServiceLocal;
+import ua.group06.persistence.AbstractUser;
+import ua.group06.persistence.ExternalUser;
 import ua.group06.persistence.User;
 
 /**
@@ -68,16 +70,23 @@ public class UserSettings extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        String email    = user.getEmail();
-        
+        AbstractUser user = (AbstractUser) session.getAttribute("user");
         String fname    = request.getParameter("firstName");
         String lname    = request.getParameter("lastName");
-        String newPassword = request.getParameter("newPassword");
-        String confirmPassword = request.getParameter("confirmPassword");
-        String currentPassword = request.getParameter("currentPassword");
-        
-        //user = authService.authenticate(email, currentPassword);
+        if(user instanceof ExternalUser){
+            changeExternalUser((ExternalUser) user, fname, lname);
+        }
+        else if(user instanceof User){
+            String newPassword = request.getParameter("newPassword");
+            String confirmPassword = request.getParameter("confirmPassword");
+            String currentPassword = request.getParameter("currentPassword");
+            changeStandardUser((User)user, fname, lname, newPassword, confirmPassword, currentPassword);
+        }
+        response.sendRedirect("settings");
+    }
+    
+    void changeStandardUser(User user, String fname,String lname , String newPassword, String confirmPassword ,String currentPassword){
+         //user = authService.authenticate(email, currentPassword);
         if(userService.checkPassword(currentPassword ,user.getPassword())){
             //User newInfo = new User();
             //newInfo.setEmail(email);
@@ -96,32 +105,34 @@ public class UserSettings extends HttpServlet {
             /*else{
                 newInfo.setLastName(user.getLastName());
             }*/
-            System.err.println(user.getPassword());
-            System.err.println(newPassword);
-            System.err.println(confirmPassword);
             if((newPassword!=null && confirmPassword!=null) && (!newPassword.isEmpty() && !confirmPassword.isEmpty())){
-                if(!newPassword.equals(confirmPassword)){
-                    request.setAttribute("message", "The new passwords do not match");
+                if(newPassword.equals(confirmPassword)){
+                    user.setPassword(newPassword);
+                    userService.editPassword(user);
                 }
                 else{
-                    user.setPassword(newPassword);
-                    System.err.println("ik ben aan het veranderen");
-                    System.err.println(userService.editPassword(user).getPassword());
+                    //request.setAttribute("message", "The new passwords do not match");
                 }
             }
             else{
-                System.err.println("ik ben nie aan het veranderen");
-               System.err.println(userService.edit(user).getPassword());
+               userService.edit(user);
             }
-            /*else{
-                newInfo.setPassword(user.getPassword());
-            }*/
-
         }
-       
-        
-        response.sendRedirect("settings");
     }
+    
+    void changeExternalUser(ExternalUser user, String fname,String lname){
+         
+            if(fname!=null && !fname.isEmpty()){
+                user.setFirstName(fname);
+            }
+
+            if(lname!=null && !lname.isEmpty()){
+                user.setLastName(lname);
+            }
+            userService.edit(user);
+    }
+    
+        
 
     /**
      * Returns a short description of the servlet.

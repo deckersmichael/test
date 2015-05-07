@@ -4,10 +4,13 @@
     Author     : matson
 --%>
 
+<%@page import="ua.group06.persistence.User"%>
+<%@page import="ua.group06.persistence.ExternalUser"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:template>
+</t:template>
     <head>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
         <link href="styles/signup.css" rel="stylesheet">
@@ -28,6 +31,9 @@
                 <label for="inputLN" class="sr-only">Last name</label>
                 <input type="text" name="lastName" id="inputLN" class="form-control" placeholder="Last name" value="${user.lastName}" required>
                 <br>
+                <% 
+                    if(session.getAttribute("user")instanceof User){ 
+                %>
                 <label for="newPassword" class="sr-only">New password</label>
                 <input type="password" name="newPassword" id="newPassword" class="form-control" placeholder="New Password">
                 <br>
@@ -37,8 +43,10 @@
                 <label for="currentPassword" class="sr-only">Enter current password (to confirm)</label>
                 <input type="password" name="currentPassword" id="currentPassword" class="form-control" placeholder="Current Password" required>
                 <br>
+                <%
+                    } 
+                %>
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Submit changes</button>
             </form>
         </div>
     </body>
-</t:template>
