@@ -124,4 +124,9 @@ public class FileService implements FileServiceLocal {
         }
     }
 
+    @Override
+    public File getFile(Long fid) {
+        return fileFacade.find(fid);
+    }
+
 }

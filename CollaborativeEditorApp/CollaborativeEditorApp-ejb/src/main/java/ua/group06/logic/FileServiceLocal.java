@@ -18,6 +18,8 @@ import ua.group06.persistence.File;
 public interface FileServiceLocal {
 
     File create(File file);
+    
+    File getFile(Long fid);
 
     int fileCount();
 
