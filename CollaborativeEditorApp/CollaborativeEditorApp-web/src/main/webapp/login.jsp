@@ -21,10 +21,14 @@
             <form class="form-signin" action="./login" method="POST">
                 <h2 class="form-signin-heading">Please sign in</h2>
                 <label for="inputEmail" class="sr-only">Email address</label>
-                <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                <input type="text" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
                 <label for="inputPassword" class="sr-only">Password</label>
                 <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                <button class="btn btn-lg btn-primary btn-block" name="confirm" value="Standard" type="submit">Sign in</button>
+                <button class="btn btn-lg btn-primary btn-block" name="confirm" value="LDAB" type="submit">Sign in with LDAB</button>
+            </form>
+            <form class="form-signin" action="./loginTwitter" method="POST">
+                <button class="btn btn-lg btn-primary btn-block" value="Twitter" type="submit">Sign in with Twitter</button>
             </form>
         </div>
     </body>

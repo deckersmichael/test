@@ -24,7 +24,19 @@
             <groupId>ua.group06</groupId>
             <artifactId>CollaborativeEditorApp-ejb</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>provided</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-core</artifactId>
+            <version>4.0.3</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.dropbox.core</groupId>
+            <artifactId>dropbox-core-sdk</artifactId>
+            <version>1.7.7</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
