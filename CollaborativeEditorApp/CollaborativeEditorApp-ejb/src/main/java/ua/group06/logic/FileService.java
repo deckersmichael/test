@@ -76,11 +76,11 @@ public class FileService implements FileServiceLocal {
     // Update file content if user is allowed to edit given file.
     // This is used by web service.
     @Override
-    public String updateContent(Long fid, String token, String email, String content, String changes) {
+    public String updateContent(Long fid, String token, String browserID, String email, String content, String changes) {
         File file = fileFacade.find(fid);
         String result = null;
         if (allowedToEdit(token, email, file)) {
-            result = merge.getUpdatedFile(fid, token, email, changes);
+            result = merge.getUpdatedFile(fid, token, browserID, email, changes);
         }
         return result;
     }

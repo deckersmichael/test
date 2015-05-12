@@ -5,20 +5,24 @@
  */
 
 $(document).ready(function () {
-    var APIURI = "http://localhost:8080/CollaborativeEditorApp-web/resources/";
+    var APIURI = "http://127.0.0.1:8080/CollaborativeEditorApp-web/resources/";
     var editor = ace.edit("editor");
     var shadowContent = editor.getValue();
     editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/plain_text");
     var changes = [];
+    editor.$blockScrolling = Infinity;
+    var typing = true;
+    var Range = require('ace/range').Range;
     
     editor.getSession().on('change', function(e) {
-        if (e.data.action === "insertText"){
-            changes.push(["insert", e.data.text, [e.data.range.start.column, e.data.range.start.row], [e.data.range.end.column, e.data.range.end.row]])
-        } else {
-            changes.push(["delete", [e.data.range.start.column, e.data.range.start.row], [e.data.range.end.column, e.data.range.end.row]])
+        if (typing === true){
+            if (e.data.action === "insertText"){
+                changes.push(["insert", e.data.text, [e.data.range.start.column, e.data.range.start.row], [e.data.range.end.column, e.data.range.end.row]]);
+            } else {
+                changes.push(["delete", [e.data.range.start.column, e.data.range.start.row], [e.data.range.end.column, e.data.range.end.row]]);
+            }
         }
-        console.log(changes);
     });
 
     var setNotificationValue = function (value) {
@@ -26,16 +30,25 @@ $(document).ready(function () {
         $(notifId).text("(" + value + ")");
     };
 
-    editor.getSession().on('change', function (e) {
-        setNotificationValue("Unsaved changes");
-    });
-
     var updateSuccess = function (msg, content) {
         setNotificationValue(msg);
-        shadowContent = content;
+        var array = JSON.parse(content);
+        for (var i = 0; i < array.length; i++) {
+            var cur = array[i];
+            //console.log(cur);
+            typing = false;
+            if (cur[0] === "addition"){
+                editor.session.insert({row:cur[2][0], column: cur[2][1]}, cur[1]);
+            } else {
+                //editor.moveCursorTo(cur[1][0], cur[1][1]);
+                //editor.selection.setSelectionRange(new Range(cur[1][0], cur[1][1], cur[2][0], cur[2][1]));
+                editor.session.replace(new Range(cur[1][0], cur[1][1], cur[2][0], cur[2][1]), "");
+            }
+            typing = true;
+        }
     };
 
-    var sendUpdate = function (data) {
+    var sendUpdate = function (passvalue) {
         $.ajax({
             headers: {
                 'Accept': 'application/json',
@@ -43,10 +56,15 @@ $(document).ready(function () {
             },
             type: "POST",
             url: APIURI + "files/update",
-            data: JSON.stringify(data),
-            success: updateSuccess("Saved", data.content),
+            data: JSON.stringify(passvalue),
+            success: function (data) {
+                updateSuccess("Saved" , data);
+            },
+            error: function(data,status,er) {
+                console.log(data + " "+ status + " " + er);
+            },
             mediaType: "application/json",
-            dataType: "json"
+            dataType: 'text'
         });
     };
 
@@ -54,11 +72,14 @@ $(document).ready(function () {
         var content = editor.getValue();
         var changesString = JSON.stringify(changes);
         if (content !== shadowContent) {
-            var data = {fileId: Info.fileId, token: Info.token, email: Info.email, content: content, changes: changesString};
+            var data = {fileId: Info.fileId, token: Info.token, browserID: Info.broserID, email: Info.email, content: content, changes: changesString};
+            sendUpdate(data);
+        } else {
+            var data = {fileId: Info.fileId, token: Info.token, browserID: Info.broserID, email: Info.email, content: content, changes: ""};
             sendUpdate(data);
         }
         changes = [];
     };
 
-    setInterval(handleUpdate, 1000);
+    setInterval(handleUpdate, 2000);
 });

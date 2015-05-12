@@ -12,7 +12,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import ua.group06.entities.FileUpdate;
 import ua.group06.logic.FileServiceLocal;
-import ua.group06.persistence.File;
 
 /**
  *
@@ -28,7 +27,7 @@ public class FileResource extends RestResource {
     @Path("update")
     // TODO: handle errors
     public Response update(FileUpdate changes) {
-        String content = fileService.updateContent(changes.getFileId(), changes.getToken(), changes.getEmail(), changes.getContent(), changes.getChanges());
+        String content = fileService.updateContent(changes.getFileId(), changes.getToken(), changes.getBrowserID(), changes.getEmail(), changes.getContent(), changes.getChanges());
         return Response.ok(content).build();
     }
 

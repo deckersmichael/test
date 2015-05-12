@@ -6,6 +6,7 @@
 package ua.group06.presentation;
 
 import java.io.IOException;
+import java.util.UUID;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,8 +46,10 @@ public class EditFile extends HttpServlet {
             Long fid = Long.parseLong(fidString);
             User user = ServletUtil.currentUser(request);
             File file = fileService.show(fid, user);
+            UUID unique = UUID.randomUUID();
             request.setAttribute("file", file);
             request.setAttribute("user", user);
+            request.setAttribute("browserID", unique.toString());
             request.getRequestDispatcher("file.jsp").forward(request, response);
         } else {
             response.sendRedirect("homepage");

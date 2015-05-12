@@ -9,14 +9,13 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import ua.group06.business.FileFacadeLocal;
 import ua.group06.persistence.File;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONString;
 import ua.group06.business.SessionFacadeLocal;
 
 /**
@@ -41,18 +40,32 @@ public class MergeBean implements MergeBeanLocal {
     }
     
     @Override
-    public String addRequest(Long uid, Long fid, ArrayList<Change> changes) {
+    public String addRequest(Long uid, Long fid, String token, String browserID, ArrayList<Change> changes) {
         Request req = new Request(uid, fid, changes);
-        boolean ret = requestQueue.add(req);
+        requestQueue.add(req);
+        
         if (!mergingEnabled){
             initiateMerge();
         }
         while (!req.isFinished()){
             try {
-                Thread.sleep(2500);
+                Thread.sleep(10);
             } catch (InterruptedException ex) {}
         }
-        return fileFacade.find(fid).getContent();
+        
+        ArrayList<ArrayList<Change>> recentChanges = fileFacade.find(fid).getChanges(uid, browserID);
+        
+        if (!changes.isEmpty())
+            fileFacade.find(fid).addChanges(changes, browserID, uid);
+        
+        JSONArray jsonarray = new JSONArray();
+        
+        for (ArrayList<Change> ac : recentChanges){
+            for (Change c : ac){
+                jsonarray.put(c.toJson());
+            }
+        }
+        return jsonarray.toString();
     }
 
     @Override
@@ -140,7 +153,6 @@ public class MergeBean implements MergeBeanLocal {
                     lines.set(d.getStartLine(), newline);
                 }
             }
-            
             String rebuilt = "";
             for (int i = 0; i < lines.size(); i++){
                 rebuilt = rebuilt.concat(lines.get(i));
@@ -148,7 +160,7 @@ public class MergeBean implements MergeBeanLocal {
                     rebuilt = rebuilt.concat("\n");
                 }
             }
-            
+
             file.setContent(rebuilt);
             fileFacade.edit(file);
             current.setFinished();
@@ -156,13 +168,15 @@ public class MergeBean implements MergeBeanLocal {
     }
 
     @Override
-    public String getUpdatedFile(Long fid, String token, String email, String changes) {
+    public String getUpdatedFile(Long fid, String token, String browserID, String email, String changes) {
         Long uid = sessionFacade.findByToken(token).getId();
-        return addRequest(uid, fid, parseChanges(changes));
+        return addRequest(uid, fid, token, browserID, parseChanges(changes, uid));
     }
     
-    private ArrayList<Change> parseChanges(String changes){
+    private ArrayList<Change> parseChanges(String changes, Long uid){
         ArrayList<Change> changesList = new ArrayList<>();
+        if (changes.length() < 2)
+            return changesList;
         try{
             JSONArray jchanges = new JSONArray(changes);
             for (int i = 0; i < jchanges.length(); i++){
@@ -171,11 +185,11 @@ public class MergeBean implements MergeBeanLocal {
                     String data = jchange.get(1).toString();
                     JSONArray start = new JSONArray(jchange.get(2).toString());
                     JSONArray end = new JSONArray(jchange.get(3).toString());
-                    changesList.add(new Addition(start.getInt(1), start.getInt(0), end.getInt(1), end.getInt(0), data));
+                    changesList.add(new Addition(start.getInt(1), start.getInt(0), end.getInt(1), end.getInt(0), data, uid));
                 } else {
                     JSONArray start = new JSONArray(jchange.get(1).toString());
                     JSONArray end = new JSONArray(jchange.get(2).toString());
-                    changesList.add(new Deletion(start.getInt(1), start.getInt(0), end.getInt(1), end.getInt(0)));
+                    changesList.add(new Deletion(start.getInt(1), start.getInt(0), end.getInt(1), end.getInt(0), uid));
                 }
             }
         } catch (JSONException e){

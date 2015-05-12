@@ -15,13 +15,16 @@
         <div id="collab-button">
             <a role="button" class="btn btn-default btn-xs" href="shares?id=${file.id}">Share...</a>
         </div>
-        <input type="hidden" name="content" id="inputContent" value="${file.content}">
-        <div id="editor">${file.content}</div>
+        <!--<input type="hidden" name="content" id="inputContent" value="${file.content}">-->
+        <input type="hidden" name="content" id="inputContent" value="">
+        <!--<div id="editor">${file.content}</div>-->
+        <div id="editor"></div>
         <script>
             var Info = {
                 fileId: ${file.id},
                 token: "${session.token}",
-                email: "${user.email}"
+                email: "${user.email}",
+                broserID: "${browserID}"
             };
         </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.9/ace.js" type="text/javascript" charset="utf-8"></script>

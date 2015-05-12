@@ -8,7 +8,9 @@ package ua.group06.persistence;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,6 +19,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import ua.group06.logic.MergeBeanLocal.Change;
 
 /**
  *
@@ -45,6 +48,7 @@ public class File implements Serializable {
     private String name;
     @NotNull
     private String content;
+    private ArrayList<String> RecentChanges_tokens;
 
     public ArrayList<String> getCollabIds() {
         ArrayList<String> ret = new ArrayList<String>();
@@ -57,8 +61,6 @@ public class File implements Serializable {
     public void _persistency_set_collabIds() {
         this.collabIds = collabIds;
     }
-
-    
     
     public File () {}
     
@@ -68,6 +70,11 @@ public class File implements Serializable {
         this.content = content;
         this.collabIds = new ArrayList<PersistString>();
         this.spectatorIds = new ArrayList<>();
+        this.RecentChanges_changesList = new ArrayList<>();
+        this.RecentChanges_users = new ArrayList<>();
+        this.RecentChanges_tokens = new ArrayList<>();
+        this.RecentChanges_timestamps = new ArrayList<>();
+        this.RecentChanges_userTimes = new HashMap<>();
     }
     
     public void addCollaborator(String email) {
@@ -150,5 +157,64 @@ public class File implements Serializable {
     public String toString() {
         return "ua.group06.persistence.File[ id=" + id + " ]";
     }
+    
+        
+    private ArrayList<ArrayList<Change>> RecentChanges_changesList;
+    private ArrayList<Long> RecentChanges_users;
+    private ArrayList<Long> RecentChanges_timestamps;
+    private Map<String, Long> RecentChanges_userTimes;
+
+
+    /**
+     * GET CHANGES FIRST!
+     * @param changes
+     * @param user 
+     */
+    public void addChanges(ArrayList<Change> changes, String token, Long user){
+        this.RecentChanges_changesList.add(changes);
+        this.RecentChanges_users.add(user);
+        this.RecentChanges_tokens.add(token);
+        this.RecentChanges_timestamps.add(System.currentTimeMillis());
+    }
+
+    public ArrayList<ArrayList<Change>> getChanges(Long user, String token){
+        if (!RecentChanges_userTimes.containsKey(token)){
+            RecentChanges_userTimes.put(token, 0L);
+        }
+        ArrayList<ArrayList<Change>> ret = new ArrayList<>();
+        Long sessiontime = RecentChanges_userTimes.get(token);
+        for (int i = 0; i < RecentChanges_changesList.size(); i++){
+            if (RecentChanges_timestamps.get(i) > sessiontime){
+                if (!RecentChanges_tokens.get(i).equals(token)){
+                    ret.add(RecentChanges_changesList.get(i));
+                }
+            }
+        }
+        this.RecentChanges_userTimes.put(token, System.currentTimeMillis());
+        //cleanlist();      todo
+        return ret;
+    }
+
+    /**
+     * TODO
+     */
+    private void cleanlist(){
+        Long minimum = Long.MAX_VALUE;
+        for (int i = 0; i < RecentChanges_userTimes.size(); i++){
+            if (RecentChanges_userTimes.get(i) < minimum) {
+                minimum = RecentChanges_userTimes.get(i);
+            }
+        }
+
+        ArrayList<ArrayList<Change>> changesListCopy;
+        ArrayList<Long> usersCopy;
+        ArrayList<Long> timestampsCopy;
+
+        //TODO
+
+    }
+        
+        
+        
     
 }

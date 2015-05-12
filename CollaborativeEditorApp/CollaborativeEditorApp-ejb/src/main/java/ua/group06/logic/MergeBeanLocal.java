@@ -5,9 +5,11 @@
  */
 package ua.group06.logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Queue;
 import javax.ejb.Local;
+import org.json.JSONArray;
 import ua.group06.entities.User;
 
 /**
@@ -17,7 +19,7 @@ import ua.group06.entities.User;
 @Local
 public interface MergeBeanLocal {
 
-    public String getUpdatedFile(Long fid, String token, String email, String content);
+    public String getUpdatedFile(Long fid, String token, String browserID, String email, String content);
     
     public class Request {
         private Long uid;
@@ -68,9 +70,15 @@ public interface MergeBeanLocal {
         }
     }
     
-    public abstract class Change {
+    public abstract class Change implements Serializable{
+        private static final long serialVersionUID = 1L;
         protected int startLine, startColumn;
         protected int endLine, endColumn;
+        protected Long uid;
+        
+        public long getUser(){
+            return uid;
+        }
 
         public int getStartLine() {
             return startLine;
@@ -88,35 +96,69 @@ public interface MergeBeanLocal {
             return endColumn;
         }
         
+        public abstract JSONArray toJson();
         
     }
     
     public class Addition extends Change {
         private String changes;
-        public Addition(int startLine, int startColumn, int endLine, int endColumn, String changes){
+        public Addition(int startLine, int startColumn, int endLine, int endColumn, String changes, Long uid){
             this.startLine = startLine;
             this.startColumn = startColumn;
             this.endLine = endLine;
             this.endColumn = endColumn;
             this.changes = changes;
+            this.uid = uid;
         }
 
         public String getChanges() {
             return changes;
         }
+
+        @Override
+        public JSONArray toJson() {
+            JSONArray ret = new JSONArray();
+            ret.put("addition");
+            ret.put(changes);
+            JSONArray start = new JSONArray();
+            start.put(startLine);
+            start.put(startColumn);
+            JSONArray end = new JSONArray();
+            end.put(endLine);
+            end.put(endColumn);
+            ret.put(start);
+            ret.put(end);
+            return ret;
+        }
     }
     
     public class Deletion extends Change {
-        public Deletion(int startLine, int startColumn, int endLine, int endColumn){
+        public Deletion(int startLine, int startColumn, int endLine, int endColumn, Long uid){
             this.startLine = startLine;
             this.startColumn = startColumn;
             this.endLine = endLine;
             this.endColumn = endColumn;
+            this.uid = uid;
+        }
+
+        @Override
+        public JSONArray toJson() {
+            JSONArray ret = new JSONArray();
+            ret.put("deletion");
+            JSONArray start = new JSONArray();
+            start.put(startLine);
+            start.put(startColumn);
+            JSONArray end = new JSONArray();
+            end.put(endLine);
+            end.put(endColumn);
+            ret.put(start);
+            ret.put(end);
+            return ret;
         }
     }
     
     
-    public String addRequest(Long uid, Long fid, ArrayList<Change> changes);
+    public String addRequest(Long uid, Long fid, String token, String browserID, ArrayList<Change> changes);
     
     public void initiateMerge();
     
