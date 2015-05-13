@@ -21,6 +21,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import ua.group06.logic.MergeBeanLocal.Change;
+import ua.group06.logic.MergeBeanLocal.Clear;
 
 /**
  *
@@ -164,6 +165,7 @@ public class File implements Serializable {
     private ArrayList<Long> RecentChanges_users;
     private ArrayList<Long> RecentChanges_timestamps;
     private Map<String, Long> RecentChanges_userTimes;
+    private Long latestVersionGetTime;
 
 
     /**
@@ -211,8 +213,41 @@ public class File implements Serializable {
         for (int i = 0; i < cutoff; i++){
             ret.add(RecentChanges_changesList.get(i));
         }
+        
+        latestVersionGetTime = time;
         return ret;
     }
+    
+    public void revertVersion(String token, Long user){
+        int cutoff = -1;
+        for (int i = 0; i < RecentChanges_timestamps.size(); i++){
+            if (RecentChanges_timestamps.get(i) > latestVersionGetTime){
+                cutoff = i;
+                break;
+            }
+        }
+        if (cutoff == -1)
+            cutoff = 0;
+        
+        ArrayList<Change> clear = new ArrayList<>();
+        clear.add(new Clear());
+        
+        this.RecentChanges_changesList.clear();
+        this.RecentChanges_users.clear();
+        this.RecentChanges_tokens.clear();
+        this.RecentChanges_timestamps.clear();
+        
+        this.RecentChanges_changesList.add(clear);
+        this.RecentChanges_users.add(user);
+        this.RecentChanges_tokens.add(token);
+        this.RecentChanges_timestamps.add(System.currentTimeMillis());
+        
+        this.RecentChanges_changesList.addAll(this.RecentChanges_changesList.subList(0, cutoff));
+        this.RecentChanges_users.addAll(this.RecentChanges_users.subList(0, cutoff));
+        this.RecentChanges_tokens.addAll(this.RecentChanges_tokens.subList(0, cutoff));
+        this.RecentChanges_timestamps.addAll(this.RecentChanges_timestamps.subList(0, cutoff));
+    }
+    
     
     public ArrayList<Integer> getCreationTime(){
         Date date;

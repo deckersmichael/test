@@ -157,6 +157,16 @@ public interface MergeBeanLocal {
         }
     }
     
+    public class Clear extends Change {
+
+        @Override
+        public JSONArray toJson() {
+            JSONArray ret = new JSONArray();
+            ret.put("clear");
+            return ret;
+        }
+        
+    }
     
     public String addRequest(Long uid, Long fid, String token, String browserID, ArrayList<Change> changes);
     

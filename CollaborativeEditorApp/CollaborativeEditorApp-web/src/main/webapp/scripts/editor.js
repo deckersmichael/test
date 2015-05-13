@@ -38,7 +38,10 @@ $(document).ready(function () {
             var cur = array[i];
             //console.log(cur);
             typing = false;
-            if (cur[0] === "addition"){
+            if (cur[0] === "clear"){
+                editor.setValue("");
+            }
+            else if (cur[0] === "addition"){
                 editor.session.insert({row:cur[2][0], column: cur[2][1]}, cur[1]);
             } else {
                 //editor.moveCursorTo(cur[1][0], cur[1][1]);
