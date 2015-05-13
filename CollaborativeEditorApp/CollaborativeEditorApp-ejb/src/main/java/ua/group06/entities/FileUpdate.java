@@ -22,6 +22,7 @@ public class FileUpdate implements Serializable {
     private String email;
     private String changes;
     private String browserID;
+    private String timeDate;
 
     public FileUpdate() {
     }
@@ -80,6 +81,14 @@ public class FileUpdate implements Serializable {
 
     public void setBrowserID(String browserID) {
         this.browserID = browserID;
+    }
+
+    public String getTimeDate() {
+        return timeDate;
+    }
+
+    public void setTimeDate(String timeDate) {
+        this.timeDate = timeDate;
     }
 
 }

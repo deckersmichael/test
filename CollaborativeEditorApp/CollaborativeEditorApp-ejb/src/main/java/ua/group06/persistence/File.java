@@ -8,6 +8,7 @@ package ua.group06.persistence;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -194,8 +195,41 @@ public class File implements Serializable {
         //cleanlist();      todo
         return ret;
     }
+    
+    public ArrayList<ArrayList<Change>> getVersion(Long time){
+        ArrayList<ArrayList<Change>> ret = new ArrayList<>();
+        int cutoff = 0;
+        for (int i = 0; i < RecentChanges_timestamps.size(); i++){
+            System.err.println((new Date(time)).toString() + " --- " + (new Date(RecentChanges_timestamps.get(i)).toString()));
+            if (RecentChanges_timestamps.get(i) > time){
+                cutoff = i;
+            }
+        }
+        
+        for (int i = 0; i < cutoff; i++){
+            ret.add(RecentChanges_changesList.get(i));
+        }
+        
+        return ret;
+    }
+    
+    public ArrayList<Integer> getCreationTime(){
+        Date date;
+        if (RecentChanges_timestamps.isEmpty())
+            date = new Date(System.currentTimeMillis());
+        else
+            date = new Date(RecentChanges_timestamps.get(0));
+        ArrayList<Integer> ret = new ArrayList<>();
+        ret.add(date.getYear());
+        ret.add(date.getMonth());
+        ret.add(date.getDay());
+        ret.add(date.getHours());
+        ret.add(date.getMinutes());
+        ret.add(date.getSeconds());
+        return ret;
+    }
 
-    /**
+    /**`
      * TODO
      */
     private void cleanlist(){

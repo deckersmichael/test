@@ -50,6 +50,16 @@ public class EditFile extends HttpServlet {
             request.setAttribute("file", file);
             request.setAttribute("user", user);
             request.setAttribute("browserID", unique.toString());
+            int year = file.getCreationTime().get(0)+1900;
+            int month = file.getCreationTime().get(1)+1;
+            int day = file.getCreationTime().get(2)+10;
+            
+            String date = Integer.toString(year)
+                    .concat("-")
+                    .concat(Integer.toString(month))
+                    .concat("-")
+                    .concat(Integer.toString(day));
+            request.setAttribute("creationDate", date);
             request.getRequestDispatcher("file.jsp").forward(request, response);
         } else {
             response.sendRedirect("homepage");

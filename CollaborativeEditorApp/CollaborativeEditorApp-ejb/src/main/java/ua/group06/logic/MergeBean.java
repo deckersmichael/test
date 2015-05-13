@@ -8,7 +8,10 @@ package ua.group06.logic;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import ua.group06.business.FileFacadeLocal;
@@ -168,9 +171,38 @@ public class MergeBean implements MergeBeanLocal {
     }
 
     @Override
-    public String getUpdatedFile(Long fid, String token, String browserID, String email, String changes) {
+    public String getUpdatedFile(Long fid, String token, String browserID, String email, String changes, String dateTime) {
         Long uid = sessionFacade.findByToken(token).getId();
-        return addRequest(uid, fid, token, browserID, parseChanges(changes, uid));
+        if (dateTime.length() > 0)
+            return getVersion(fid, parseDate(dateTime).getTime());
+        else
+            return addRequest(uid, fid, token, browserID, parseChanges(changes, uid));
+    }
+    
+    private String getVersion(Long fid, Long time) {
+        ArrayList<ArrayList<Change>> recentChanges = fileFacade.find(fid).getVersion(time);
+        
+        JSONArray jsonarray = new JSONArray();
+        
+        for (ArrayList<Change> ac : recentChanges){
+            for (Change c : ac){
+                jsonarray.put(c.toJson());
+            }
+        }
+        return jsonarray.toString();
+    }
+    
+    private Date parseDate(String dateTime){
+        Date date = new Date();
+        try {
+            JSONArray datetime = new JSONArray(dateTime);
+            date.setMonth(datetime.getInt(0));
+            date.setDate(datetime.getInt(1));
+            date.setYear(datetime.getInt(2));
+            date.setHours(datetime.getInt(3));
+            date.setMinutes(datetime.getInt(4));
+        } catch (JSONException ex) {}
+        return date;
     }
     
     private ArrayList<Change> parseChanges(String changes, Long uid){

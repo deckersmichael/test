@@ -17,6 +17,7 @@ $(document).ready(function () {
     
     editor.getSession().on('change', function(e) {
         if (typing === true){
+            setNotificationValue('Unsaved changes...');
             if (e.data.action === "insertText"){
                 changes.push(["insert", e.data.text, [e.data.range.start.column, e.data.range.start.row], [e.data.range.end.column, e.data.range.end.row]]);
             } else {
@@ -68,18 +69,34 @@ $(document).ready(function () {
         });
     };
 
+    var pauseUpdate = false;
+    
     var handleUpdate = function () {
-        var content = editor.getValue();
-        var changesString = JSON.stringify(changes);
-        if (content !== shadowContent) {
-            var data = {fileId: Info.fileId, token: Info.token, browserID: Info.broserID, email: Info.email, content: content, changes: changesString};
-            sendUpdate(data);
-        } else {
-            var data = {fileId: Info.fileId, token: Info.token, browserID: Info.broserID, email: Info.email, content: content, changes: ""};
-            sendUpdate(data);
+        if (pauseUpdate === false){
+            var content = editor.getValue();
+            var changesString = JSON.stringify(changes);
+            if (content !== shadowContent) {
+                var data = {fileId: Info.fileId, token: Info.token, browserID: Info.broserID, email: Info.email, content: content, changes: changesString, timeDate: ""};
+                sendUpdate(data);
+            } else {
+                var data = {fileId: Info.fileId, token: Info.token, browserID: Info.broserID, email: Info.email, content: content, changes: "", timeDate: ""};
+                sendUpdate(data);
+            }
+            changes = [];
         }
-        changes = [];
     };
+    
+    window.showHistoryText = function (date, time) {
+        pauseUpdate = true;
+        editor.setReadOnly(true);
+        
+        editor.setValue("");
+        
+        date.push.apply(date, time);
+        
+        var data = {fileId: Info.fileId, token: Info.token, browserID: Info.broserID, email: Info.email, content: "", changes: "", timeDate: JSON.stringify(date)};
+        sendUpdate(data);
+    }
 
     setInterval(handleUpdate, 2000);
 });

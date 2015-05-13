@@ -19,7 +19,7 @@ import ua.group06.entities.User;
 @Local
 public interface MergeBeanLocal {
 
-    public String getUpdatedFile(Long fid, String token, String browserID, String email, String content);
+    public String getUpdatedFile(Long fid, String token, String browserID, String email, String content, String dateTime);
     
     public class Request {
         private Long uid;

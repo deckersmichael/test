@@ -31,7 +31,7 @@ public interface FileServiceLocal {
 
     void delete(Long fid, User user);
 
-    String updateContent(Long fid, String token, String browserID, String email, String content, String changes);
+    String updateContent(Long fid, String token, String browserID, String email, String content, String changes, String timeDate);
     
     void updateCollabs(Long fid, User user, boolean edit, String email, boolean add);
     
