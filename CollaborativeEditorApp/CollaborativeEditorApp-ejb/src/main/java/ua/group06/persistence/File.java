@@ -198,18 +198,19 @@ public class File implements Serializable {
     
     public ArrayList<ArrayList<Change>> getVersion(Long time){
         ArrayList<ArrayList<Change>> ret = new ArrayList<>();
-        int cutoff = 0;
+        int cutoff = -1;
         for (int i = 0; i < RecentChanges_timestamps.size(); i++){
-            System.err.println((new Date(time)).toString() + " --- " + (new Date(RecentChanges_timestamps.get(i)).toString()));
             if (RecentChanges_timestamps.get(i) > time){
                 cutoff = i;
+                break;
             }
         }
+        if (cutoff == -1)
+            cutoff = RecentChanges_timestamps.size();
         
         for (int i = 0; i < cutoff; i++){
             ret.add(RecentChanges_changesList.get(i));
         }
-        
         return ret;
     }
     
