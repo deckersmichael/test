@@ -21,6 +21,8 @@ public interface MergeBeanLocal {
 
     public String getUpdatedFile(Long fid, String token, String browserID, String email, String content, String dateTime);
     
+    //public String revert;
+    
     public class Request {
         private Long uid;
         private String content;

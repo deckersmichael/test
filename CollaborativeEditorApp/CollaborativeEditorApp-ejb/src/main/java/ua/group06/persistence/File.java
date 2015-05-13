@@ -77,6 +77,7 @@ public class File implements Serializable {
         this.RecentChanges_tokens = new ArrayList<>();
         this.RecentChanges_timestamps = new ArrayList<>();
         this.RecentChanges_userTimes = new HashMap<>();
+        this.latestVersionGetTime = new HashMap<>();
     }
     
     public void addCollaborator(String email) {
@@ -165,7 +166,7 @@ public class File implements Serializable {
     private ArrayList<Long> RecentChanges_users;
     private ArrayList<Long> RecentChanges_timestamps;
     private Map<String, Long> RecentChanges_userTimes;
-    private Long latestVersionGetTime;
+    private Map<String, Long> latestVersionGetTime;
 
 
     /**
@@ -198,7 +199,7 @@ public class File implements Serializable {
         return ret;
     }
     
-    public ArrayList<ArrayList<Change>> getVersion(Long time){
+    public ArrayList<ArrayList<Change>> getVersion(Long time, String token){
         ArrayList<ArrayList<Change>> ret = new ArrayList<>();
         int cutoff = -1;
         for (int i = 0; i < RecentChanges_timestamps.size(); i++){
@@ -214,14 +215,14 @@ public class File implements Serializable {
             ret.add(RecentChanges_changesList.get(i));
         }
         
-        latestVersionGetTime = time;
+        latestVersionGetTime.put(token, time);
         return ret;
     }
     
     public void revertVersion(String token, Long user){
         int cutoff = -1;
         for (int i = 0; i < RecentChanges_timestamps.size(); i++){
-            if (RecentChanges_timestamps.get(i) > latestVersionGetTime){
+            if (RecentChanges_timestamps.get(i) > latestVersionGetTime.get(token)){
                 cutoff = i;
                 break;
             }
@@ -231,21 +232,19 @@ public class File implements Serializable {
         
         ArrayList<Change> clear = new ArrayList<>();
         clear.add(new Clear());
+     
+        Long firstTime = RecentChanges_timestamps.get(0)-1;
+        this.RecentChanges_changesList.add(0, clear);
+        this.RecentChanges_users.add(0, user);
+        this.RecentChanges_tokens.add(0, token);
+        this.RecentChanges_timestamps.add(0, firstTime);
         
-        this.RecentChanges_changesList.clear();
-        this.RecentChanges_users.clear();
-        this.RecentChanges_tokens.clear();
-        this.RecentChanges_timestamps.clear();
+        int size = RecentChanges_changesList.size();
+        this.RecentChanges_changesList.subList(size - (cutoff - 1), size).clear();
+        this.RecentChanges_users.subList(size - (cutoff - 1), size).clear();
+        this.RecentChanges_tokens.subList(size - (cutoff - 1), size).clear();
+        this.RecentChanges_timestamps.subList(size - (cutoff - 1), size).clear();
         
-        this.RecentChanges_changesList.add(clear);
-        this.RecentChanges_users.add(user);
-        this.RecentChanges_tokens.add(token);
-        this.RecentChanges_timestamps.add(System.currentTimeMillis());
-        
-        this.RecentChanges_changesList.addAll(this.RecentChanges_changesList.subList(0, cutoff));
-        this.RecentChanges_users.addAll(this.RecentChanges_users.subList(0, cutoff));
-        this.RecentChanges_tokens.addAll(this.RecentChanges_tokens.subList(0, cutoff));
-        this.RecentChanges_timestamps.addAll(this.RecentChanges_timestamps.subList(0, cutoff));
     }
     
     

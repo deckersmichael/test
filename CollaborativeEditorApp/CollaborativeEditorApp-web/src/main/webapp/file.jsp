@@ -20,8 +20,8 @@
                         <li><a href="shares?id=${file.id}">Share</a></li>
                         <li><input type="text" value="" id="basic_example_1" name="basic_example_1" /></li>
                         <li><button onclick="showHistory()">Show history</button></li>
-                        <li><button onclick="showHistory()">Revert to this time</button></li>
-                        <li><button onclick="showHistory()">Back to current</button></li>
+                        <li><button onclick="revertToPrevious()">Revert to this time</button></li>
+                        <li><button onclick="showCurrent()">Back to current</button></li>
                         <script>
                             var hm;
                             var mdy;
@@ -34,6 +34,7 @@
                                 mdy[2] = mdy[2]-1900;
                                 showHistoryText(mdy, hm);
                             }
+                            
                         </script>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">

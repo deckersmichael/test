@@ -70,6 +70,8 @@ public class MergeBean implements MergeBeanLocal {
         }
         return jsonarray.toString();
     }
+    
+    
 
     @Override
     public void initiateMerge() {
@@ -173,14 +175,32 @@ public class MergeBean implements MergeBeanLocal {
     @Override
     public String getUpdatedFile(Long fid, String token, String browserID, String email, String changes, String dateTime) {
         Long uid = sessionFacade.findByToken(token).getId();
-        if (dateTime.length() > 0)
-            return getVersion(fid, parseDate(dateTime).getTime());
+        if (dateTime.equals("do_revert"))
+            return revertVersion(fid, browserID, uid);
+        else if (dateTime.length() > 0)
+            return getVersion(fid, parseDate(dateTime).getTime(), browserID);
         else
             return addRequest(uid, fid, token, browserID, parseChanges(changes, uid));
     }
     
-    private String getVersion(Long fid, Long time) {
-        ArrayList<ArrayList<Change>> recentChanges = fileFacade.find(fid).getVersion(time);
+    private String getVersion(Long fid, Long time, String browserID) {
+        ArrayList<ArrayList<Change>> recentChanges = fileFacade.find(fid).getVersion(time, browserID);
+        
+        JSONArray jsonarray = new JSONArray();
+        
+        for (ArrayList<Change> ac : recentChanges){
+            for (Change c : ac){
+                jsonarray.put(c.toJson());
+            }
+        }
+        return jsonarray.toString();
+    }
+    
+    private String revertVersion(Long fid, String browserID, Long uid){
+        File file = fileFacade.find(fid);
+        file.revertVersion(browserID, uid);
+        
+        ArrayList<ArrayList<Change>> recentChanges = file.getChanges(uid, browserID);
         
         JSONArray jsonarray = new JSONArray();
         
@@ -201,6 +221,7 @@ public class MergeBean implements MergeBeanLocal {
             date.setYear(datetime.getInt(2));
             date.setHours(datetime.getInt(3));
             date.setMinutes(datetime.getInt(4));
+            date.setSeconds(0);
         } catch (JSONException ex) {}
         return date;
     }

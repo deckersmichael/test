@@ -79,15 +79,23 @@ $(document).ready(function () {
             var content = editor.getValue();
             var changesString = JSON.stringify(changes);
             if (content !== shadowContent) {
-                var data = {fileId: Info.fileId, token: Info.token, browserID: Info.broserID, email: Info.email, content: content, changes: changesString, timeDate: ""};
+                var data = {fileId: Info.fileId, token: Info.token, browserID: Info.browserID, email: Info.email, content: content, changes: changesString, timeDate: ""};
                 sendUpdate(data);
             } else {
-                var data = {fileId: Info.fileId, token: Info.token, browserID: Info.broserID, email: Info.email, content: content, changes: "", timeDate: ""};
+                var data = {fileId: Info.fileId, token: Info.token, browserID: Info.browserID, email: Info.email, content: content, changes: "", timeDate: ""};
                 sendUpdate(data);
             }
             changes = [];
         }
     };
+    
+    window.showCurrent = function () {
+        pauseUpdate = false;
+        editor.setReadOnly(false);
+        Info.browserID = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {var r = Math.random()*16|0,v=c=='x'?r:r&0x3|0x8;return v.toString(16);});
+        editor.setValue("");
+        handleUpdate();
+    }
     
     window.showHistoryText = function (date, time) {
         pauseUpdate = true;
@@ -97,9 +105,15 @@ $(document).ready(function () {
         
         date.push.apply(date, time);
         
-        var data = {fileId: Info.fileId, token: Info.token, browserID: Info.broserID, email: Info.email, content: "", changes: "", timeDate: JSON.stringify(date)};
+        var data = {fileId: Info.fileId, token: Info.token, browserID: Info.browserID, email: Info.email, content: "", changes: "", timeDate: JSON.stringify(date)};
         sendUpdate(data);
     }
 
+    window.revertToPrevious = function () {
+        editor.setValue("");
+        var data = {fileId: Info.fileId, token: Info.token, browserID: Info.browserID, email: Info.email, content: "", changes: "", timeDate: "do_revert"};
+        sendUpdate(data);
+    }
+    
     setInterval(handleUpdate, 2000);
 });
