@@ -186,6 +186,18 @@ public class File implements Serializable {
         this.RecentChanges_tokens.add(token);
         this.RecentChanges_timestamps.add(System.currentTimeMillis());
     }
+    
+    public ArrayList<Change> getAllChanges(){
+        ArrayList<Change> ret = new ArrayList<>();
+        for (ArrayList<Change> list : this.RecentChanges_changesList){
+            for (Change c : list){
+                if (!(c instanceof Clear)){
+                    ret.add(c);
+                }
+            }
+        }
+        return ret;
+    }
 
     public ArrayList<ArrayList<Change>> getChanges(Long user, String token){
         if (!RecentChanges_userTimes.containsKey(token)){
@@ -224,9 +236,24 @@ public class File implements Serializable {
         latestVersionGetTime.put(token, time);
         return ret;
     }
+
+    public ArrayList<ArrayList<Change>> getRecentChanges_changesList() {
+        return RecentChanges_changesList;
+    }
+
+    public ArrayList<Long> getRecentChanges_timestamps() {
+        return RecentChanges_timestamps;
+    }
     
     public void revertVersion(String token, Long user){
         int cutoff = -1;
+        if (!latestVersionGetTime.containsKey(token))
+            return;
+        
+        ArrayList<ArrayList<Change>> ret1 = new ArrayList<>();
+        ArrayList<Long> ret2 = new ArrayList<>();
+        ArrayList<String> ret3 = new ArrayList<>();
+        ArrayList<Long> ret4 = new ArrayList<>();
         for (int i = 0; i < RecentChanges_timestamps.size(); i++){
             if (RecentChanges_timestamps.get(i) > latestVersionGetTime.get(token)){
                 cutoff = i;
@@ -234,7 +261,40 @@ public class File implements Serializable {
             }
         }
         if (cutoff == -1)
-            cutoff = 0;
+            cutoff = RecentChanges_timestamps.size();
+        
+        for (int i = 0; i < cutoff; i++){
+            ret1.add(RecentChanges_changesList.get(i));
+            ret2.add(RecentChanges_users.get(i));
+            ret3.add(RecentChanges_tokens.get(i));
+            ret4.add(RecentChanges_timestamps.get(i));
+        }
+        
+        this.RecentChanges_changesList = ret1;
+        this.RecentChanges_users = ret2;
+        this.RecentChanges_tokens = ret3;
+        this.RecentChanges_timestamps = ret4;
+        
+        ArrayList<Change> clear = new ArrayList<>();
+        clear.add(new Clear());
+     
+        Long firstTime = RecentChanges_timestamps.get(0)-1;
+        this.RecentChanges_changesList.add(0, clear);
+        this.RecentChanges_users.add(0, user);
+        this.RecentChanges_tokens.add(0, token);
+        this.RecentChanges_timestamps.add(0, firstTime);
+        
+        
+        
+        
+        /*for (int i = 0; i < RecentChanges_timestamps.size(); i++){
+            if (RecentChanges_timestamps.get(i) > latestVersionGetTime.get(token)){
+                cutoff = i+1;
+                break;
+            }
+        }
+        if (cutoff == -1)
+            cutoff = 1;
         
         ArrayList<Change> clear = new ArrayList<>();
         clear.add(new Clear());
@@ -249,7 +309,7 @@ public class File implements Serializable {
         this.RecentChanges_changesList.subList(size - (cutoff - 1), size).clear();
         this.RecentChanges_users.subList(size - (cutoff - 1), size).clear();
         this.RecentChanges_tokens.subList(size - (cutoff - 1), size).clear();
-        this.RecentChanges_timestamps.subList(size - (cutoff - 1), size).clear();
+        this.RecentChanges_timestamps.subList(size - (cutoff - 1), size).clear();*/
         
         RecentChanges_userTimes.clear();
     }

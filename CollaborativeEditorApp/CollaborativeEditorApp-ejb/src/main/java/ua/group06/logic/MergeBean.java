@@ -123,9 +123,11 @@ public class MergeBean implements MergeBeanLocal {
             for (Change c : current.getChanges()){
                 if (c instanceof Clear){
                     lines = new ArrayList<>();
-                }
-                if (c instanceof Addition){
+                } else if (c instanceof Addition){
                     Addition a = (Addition) c;
+                    if (lines.size() == 0){
+                        lines.add("");
+                    }
                     String newline = lines.get(a.getStartLine()).substring(0, a.getStartColumn())
                             .concat(a.getChanges())
                             .concat(lines.get(a.getStartLine()).substring(a.getStartColumn()));
@@ -178,7 +180,7 @@ public class MergeBean implements MergeBeanLocal {
 
     @Override
     public String getUpdatedFile(Long fid, String token, String browserID, String changes, String dateTime) {
-        Long uid = sessionFacade.findByToken(token).getId();
+        Long uid = sessionFacade.findByToken(token).getUserId();
         if (dateTime.equals("do_revert"))
             return revertVersion(fid, browserID, uid);
         else if (dateTime.length() > 0)

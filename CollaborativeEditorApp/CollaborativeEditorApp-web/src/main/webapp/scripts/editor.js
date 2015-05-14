@@ -6,10 +6,11 @@
 
 $(document).ready(function () {
     var APIURI = "http://127.0.0.1:8080/CollaborativeEditorApp-web/resources/";
-    var editor = ace.edit("editor");
+    window.editor = ace.edit("editor");
     var shadowContent = editor.getValue();
     editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/plain_text");
+    editor.getSession().setNewLineMode("windows");
     var changes = [];
     editor.$blockScrolling = Infinity;
     var typing = true;
@@ -34,7 +35,6 @@ $(document).ready(function () {
     var updateSuccess = function (msg, content) {
         setNotificationValue(msg);
         var array = JSON.parse(content);
-        console.log(array);
         for (var i = 0; i < array.length; i++) {
             var cur = array[i];
             //console.log(cur);

@@ -12,7 +12,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import ua.group06.entities.User;
 import ua.group06.logic.FileServiceLocal;
+import ua.group06.util.ServletUtil;
 
 /**
  *
@@ -22,7 +24,7 @@ import ua.group06.logic.FileServiceLocal;
 public class HomePage extends HttpServlet {
     @EJB
     private FileServiceLocal fileService;
-
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,7 +36,8 @@ public class HomePage extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int fileCount = fileService.fileCount();
+        User user = ServletUtil.currentUser(request);
+        int fileCount = fileService.filesForUser(user).size();
         request.setAttribute("fileCount", fileCount);
         request.getRequestDispatcher("homepage.jsp").forward(request, response);
     }

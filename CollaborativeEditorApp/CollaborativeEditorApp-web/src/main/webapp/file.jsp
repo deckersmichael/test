@@ -17,12 +17,31 @@
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
+                        <li><a href="#" onclick="Download();">Download <small>(.txt)</small></a></li>
                         <li><a href="shares?id=${file.id}">Share</a></li>
                         <li><a href="#" onclick="OpenChat();">Chat</a></li>
-                        <li><a href="#" onclick="OpenChat();">Stats</a></li>
+                        <li><a href="#" onclick="OpenStat();">Stats</a></li>
                         <script>
+                            function Download() {
+                                var pom = document.createElement('a');
+                                pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(window.editor.getValue()));
+                                pom.setAttribute('download', '${file.name}' + '.txt');
+                                pom.click();
+                                //if (document.createEvent) {
+                                //    var event = document.createEvent('MouseEvents');
+                                //    event.initEvent('click', true, true);
+                                //    pom.dispatchEvent(event);
+                                //}
+                                //else {
+                                //    pom.click();
+                                //}
+                            }
                             function OpenChat() {
                                 window.open("chat?id=${file.id}", "", "width=572, height=600");
+                            }
+                            
+                            function OpenStat() {
+                                window.open("Statistics?id=${file.id}", "", "width=800, height=600");
                             }
                         </script>
                         <li><input type="text" value="" id="basic_example_1" name="basic_example_1" /></li>
