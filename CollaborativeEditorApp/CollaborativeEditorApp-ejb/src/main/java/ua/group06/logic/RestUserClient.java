@@ -10,6 +10,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import ua.group06.entities.User;
+import ua.group06.filters.ClientAuthenticationFilter;
 
 /**
  *
@@ -18,8 +19,15 @@ import ua.group06.entities.User;
 public class RestUserClient {
     private final String ROOT = "http://localhost:8080/UserManagementApp-web/resources/users";
 
-    public User login(String email, String password) {
+    // Add authentication filter to default client.
+    private Client getClient() {
         Client client = ClientBuilder.newClient();
+        client.register(new ClientAuthenticationFilter());
+        return client;
+    }
+
+    public User login(String email, String password) {
+        Client client = getClient();
         User user = client
                 .target(ROOT + "/login")
                 .queryParam("email", email)
@@ -31,7 +39,7 @@ public class RestUserClient {
 
 
     public User loginLDAB(String login, String password) {
-        Client client = ClientBuilder.newClient();
+        Client client = getClient();
         User user = client
                 .target(ROOT + "/loginLDAB")
                 .queryParam("login", login)
@@ -42,7 +50,7 @@ public class RestUserClient {
     }
 
     public User loginTwitter(String username) {
-        Client client = ClientBuilder.newClient();
+        Client client = getClient();
         User user = client
                 .target(ROOT + "/loginTwitter")
                 .queryParam("username", username)
@@ -52,7 +60,7 @@ public class RestUserClient {
     }
 
     public User get(Long id) {
-        Client client = ClientBuilder.newClient();
+        Client client = getClient();
         User user = client
                 .target(ROOT + "/" + id.toString())
                 .request(MediaType.APPLICATION_JSON)
@@ -61,7 +69,7 @@ public class RestUserClient {
     }
 
     public User getByEmail(String email) {
-        Client client = ClientBuilder.newClient();
+        Client client = getClient();
         User user = client
                 .target(ROOT + "/findByEmail")
                 .queryParam("email", email)
