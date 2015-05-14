@@ -34,6 +34,7 @@ $(document).ready(function () {
     var updateSuccess = function (msg, content) {
         setNotificationValue(msg);
         var array = JSON.parse(content);
+        console.log(array);
         for (var i = 0; i < array.length; i++) {
             var cur = array[i];
             //console.log(cur);
@@ -115,5 +116,5 @@ $(document).ready(function () {
         sendUpdate(data);
     }
     
-    setInterval(handleUpdate, 2000);
+    setInterval(handleUpdate, 500);
 });

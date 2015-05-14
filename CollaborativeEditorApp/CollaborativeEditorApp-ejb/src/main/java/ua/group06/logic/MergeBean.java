@@ -50,11 +50,11 @@ public class MergeBean implements MergeBeanLocal {
         if (!mergingEnabled){
             initiateMerge();
         }
-        while (!req.isFinished()){
+        /*while (!req.isFinished()){
             try {
                 Thread.sleep(10);
             } catch (InterruptedException ex) {}
-        }
+        }*/
         
         ArrayList<ArrayList<Change>> recentChanges = fileFacade.find(fid).getChanges(uid, browserID);
         
@@ -121,6 +121,9 @@ public class MergeBean implements MergeBeanLocal {
                 lines.add("");
             
             for (Change c : current.getChanges()){
+                if (c instanceof Clear){
+                    lines = new ArrayList<>();
+                }
                 if (c instanceof Addition){
                     Addition a = (Addition) c;
                     String newline = lines.get(a.getStartLine()).substring(0, a.getStartColumn())
@@ -167,6 +170,7 @@ public class MergeBean implements MergeBeanLocal {
             }
 
             file.setContent(rebuilt);
+
             fileFacade.edit(file);
             current.setFinished();
         }
@@ -201,6 +205,18 @@ public class MergeBean implements MergeBeanLocal {
         file.revertVersion(browserID, uid);
         
         ArrayList<ArrayList<Change>> recentChanges = file.getChanges(uid, browserID);
+        ArrayList<Change> combined = new ArrayList<>();
+        
+        for (ArrayList<Change> c : recentChanges){
+            combined.addAll(c);
+        }
+        
+        Request req = new Request(uid, fid, combined);
+        requestQueue.add(req);
+        
+        if (!mergingEnabled){
+            initiateMerge();
+        }
         
         JSONArray jsonarray = new JSONArray();
         

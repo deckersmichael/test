@@ -6,7 +6,9 @@
 package ua.group06.logic;
 
 import java.io.StringReader;
-import java.util.Base64;
+import java.util.Arrays;
+//import java.util.Base64;
+import org.apache.commons.codec.binary.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.json.Json;
@@ -35,9 +37,11 @@ public class RestUserClient {
     
     
     public JSONArray LDABlogin(String user, String password) {
-        Base64.Encoder encoder = Base64.getEncoder();
-        String encodedUser = encoder.encodeToString(user.getBytes());
-        String encodedPassword = encoder.encodeToString(password.getBytes());
+        //Base64.Encoder encoder = Base64.getEncoder();
+        byte[] byteArray = Base64.encodeBase64(user.getBytes());
+        String encodedUser = Arrays.toString(byteArray);
+        byteArray = Base64.encodeBase64(password.getBytes());
+        String encodedPassword = Arrays.toString(byteArray);
         //Create the rest client
         Client client= ClientBuilder.newClient();
         WebTarget resourceTarget = client.target(ROOT);

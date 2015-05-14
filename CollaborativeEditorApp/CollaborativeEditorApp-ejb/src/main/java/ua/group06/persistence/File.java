@@ -6,16 +6,19 @@
 package ua.group06.persistence;
 
 import java.io.Serializable;
+import java.sql.Clob;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -48,8 +51,9 @@ public class File implements Serializable {
     private List<String> spectatorIds;
     @NotNull
     private String name;
-    @NotNull
+    @Lob
     private String content;
+    
     private ArrayList<String> RecentChanges_tokens;
 
     public ArrayList<String> getCollabIds() {
@@ -245,6 +249,7 @@ public class File implements Serializable {
         this.RecentChanges_tokens.subList(size - (cutoff - 1), size).clear();
         this.RecentChanges_timestamps.subList(size - (cutoff - 1), size).clear();
         
+        RecentChanges_userTimes.clear();
     }
     
     
