@@ -48,7 +48,6 @@ public class EditFile extends HttpServlet {
             File file = fileService.show(fid, user);
             UUID unique = UUID.randomUUID();
             request.setAttribute("file", file);
-            request.setAttribute("user", user);
             request.setAttribute("browserID", unique.toString());
             int year = file.getCreationTime().get(0)+1900;
             int month = file.getCreationTime().get(1)+1;
@@ -60,7 +59,11 @@ public class EditFile extends HttpServlet {
                     .concat("-")
                     .concat(Integer.toString(day));
             request.setAttribute("creationDate", date);
-            request.getRequestDispatcher("file.jsp").forward(request, response);
+            if (file != null)
+                request.getRequestDispatcher("file.jsp").forward(request, response);
+            else {
+                request.getRequestDispatcher("NotAllowed.jsp").forward(request, response);
+            }
         } else {
             response.sendRedirect("homepage");
         }

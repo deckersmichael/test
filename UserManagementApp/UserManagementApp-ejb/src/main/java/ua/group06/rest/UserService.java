@@ -20,6 +20,7 @@ import ua.group06.logic.ExternalUserServiceLocal;
 import ua.group06.logic.RestUserClient;
 import ua.group06.logic.UserAuthenticationServiceLocal;
 import ua.group06.logic.UserRegistrationServiceLocal;
+import ua.group06.persistence.AbstractUser;
 import ua.group06.persistence.ExternalUser;
 import ua.group06.persistence.User;
 
@@ -42,8 +43,11 @@ public class UserService extends RestResource {
     @GET
     @Path("/{id}")
     public Response find(@PathParam("id") Long id) {
-        User user = (User)userFacade.find(id);
-        return Response.ok(user).build();
+        AbstractUser user = userFacade.find(id);
+        if (user instanceof User)
+            return Response.ok((User) user).build();
+        else
+            return Response.ok((ExternalUser) user).build();
     }
     
     @GET

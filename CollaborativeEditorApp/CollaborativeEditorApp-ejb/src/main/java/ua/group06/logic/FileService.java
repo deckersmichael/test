@@ -28,6 +28,8 @@ public class FileService implements FileServiceLocal {
     @EJB
     private SessionServiceLocal sessionService;
 
+    private RestUserClient ruc = new RestUserClient();
+
     @Override
     public File create(File file) {
         try {
@@ -46,7 +48,7 @@ public class FileService implements FileServiceLocal {
 
     @Override
     public List<File> filesForUser(User user) {
-        return fileFacade.findAllForUser(user.getId(), user.getEmail());
+        return fileFacade.findAllForUser(user.getId());
     }
 
     @Override
@@ -76,11 +78,11 @@ public class FileService implements FileServiceLocal {
     // Update file content if user is allowed to edit given file.
     // This is used by web service.
     @Override
-    public String updateContent(Long fid, String token, String browserID, String email, String content, String changes, String timeDate) {
+    public String updateContent(Long fid, String token, String browserID, String content, String changes, String timeDate) {
         File file = fileFacade.find(fid);
         String result = null;
-        if (allowedToEdit(token, email, file)) {
-            result = merge.getUpdatedFile(fid, token, browserID, email, changes, timeDate);
+        if (allowedToEdit(token, file)) {
+            result = merge.getUpdatedFile(fid, token, browserID, changes, timeDate);
         }
         return result;
     }
@@ -97,7 +99,7 @@ public class FileService implements FileServiceLocal {
      * @return whether the user can modify
      */
     private boolean allowedFile(Long fid, User user) {
-        return fileFacade.find(fid).getUserId().equals(user.getId()) || fileFacade.find(fid).getCollabIds().contains(user.getEmail());
+        return fileFacade.find(fid).getUserId().equals(user.getId()) || fileFacade.find(fid).getCollabIds().contains(user.getId());
     }
 
     private boolean allowed(File file, User user) {
@@ -105,25 +107,31 @@ public class FileService implements FileServiceLocal {
     }
 
     // Check if user is allowed to edit given file.
-    private boolean allowedToEdit(String token, String email, File file) {
+    private boolean allowedToEdit(String token, File file) {
         Session session = sessionService.findByToken(token);
-        return file.getUserId().equals(session.getUserId()) || file.getCollabIds().contains(email);
+        return file.getUserId().equals(session.getUserId()) || file.getCollabIds().contains(session.getUserId());
     }
 
     @Override
-    public void updateCollabs(Long fid, User user, boolean edit, String email, boolean add) {
+    public void updateCollabs(Long fid, User user, boolean edit, Long newid, boolean add) {
         File file = fileFacade.find(fid);
         if (allowedFile(fid, user)) {
-            if (edit)
+            if (edit){
+                User addUser = ruc.get(newid);
+                if (addUser != null){
+                    if (add){
+                        file.addCollaborator(addUser.getId());
+                    }
+                    else {
+                        file.removeCollaborator(addUser.getId());
+                    }
+                }
+            /*else 
                 if (add)
-                    file.addCollaborator(email);
+                    file.addSpectator(newid);
                 else
-                    file.removeCollaborator(email);
-            else 
-                if (add)
-                    file.addSpectator(email);
-                else
-                    file.removeSpectator(email);  
+                    file.removeSpectator(newid);  */
+            }
             fileFacade.edit(file);
         }
     }

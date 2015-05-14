@@ -30,6 +30,6 @@ public interface FileFacadeLocal {
 
     int count();
 
-    List<File> findAllForUser(Long uid, String uemail);
+    List<File> findAllForUser(Long uid);
 
 }

@@ -18,6 +18,13 @@
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li><a href="shares?id=${file.id}">Share</a></li>
+                        <li><a href="#" onclick="OpenChat();">Chat</a></li>
+                        <li><a href="#" onclick="OpenChat();">Stats</a></li>
+                        <script>
+                            function OpenChat() {
+                                window.open("chat?id=${file.id}", "", "width=572, height=600");
+                            }
+                        </script>
                         <li><input type="text" value="" id="basic_example_1" name="basic_example_1" /></li>
                         <li><button onclick="showHistory()">Show history</button></li>
                         <li><button onclick="revertToPrevious()">Revert to this time</button></li>
@@ -51,7 +58,6 @@
             var Info = {
                 fileId: ${file.id},
                 token: "${session.token}",
-                email: "${user.email}",
                 browserID: "${browserID}"
             };
             

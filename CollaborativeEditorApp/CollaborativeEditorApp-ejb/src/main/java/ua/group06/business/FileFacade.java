@@ -10,7 +10,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import ua.group06.persistence.File;
-import ua.group06.persistence.PersistString;
+import ua.group06.persistence.PersistLong;
 
 /**
  *
@@ -31,14 +31,14 @@ public class FileFacade extends AbstractFacade<File> implements FileFacadeLocal 
     }
 
     @Override
-    public List<File> findAllForUser(Long uid, String uemail) {
+    public List<File> findAllForUser(Long uid) {
         List results = em.createNamedQuery(
                 "File.findAllForUser")
-                .setParameter("uid", uid)
+                .setParameter("uid", new PersistLong(uid))
                 .getResultList();
         List results2 = em.createNamedQuery(
                 "File.findAllForCollabs")
-                .setParameter("uemail", new PersistString(uemail))
+                .setParameter("uid", new PersistLong(uid))
                 .getResultList();
         results.addAll(results2);
         return results;

@@ -31,28 +31,14 @@
                     </td>
                 </tr>
                 </c:forEach>
-                <c:forEach items="${file.spectators}" var="spectator">
-                <tr>
-                    <td>${spectator}</td>
-                    <td>Spectator</td>
-                    <td><form method="POST">
-                        <input type="hidden" name="action" value="remove" />
-                        <input type="hidden" name="name" value="${spectator}" />
-                        <input type="hidden" name="id" value="${file.id}" />
-                        <input type="hidden" name="type" value="spec" />
-                        <button class="btn btn-danger btn-xs" type="submit">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                </c:forEach>
         </table>
         <br>
         <form method="POST" class="form-horizontal">
             <legend>Add share</legend>
             <label for="inputName">Email</label>
             <input type="text" name="name" id="inputName"/><br>
-            <input type="radio" name="type" value="collab" checked> Collaborator
-            <input type="radio" name="type" value="spec"> Spectator
+            <!--<input type="radio" name="type" value="collab" checked> Collaborator
+            <input type="radio" name="type" value="spec"> Spectator-->
             <input type="hidden" name="action" value="add" />
             <input type="hidden" name="id" value="${file.id}" />
             <br>

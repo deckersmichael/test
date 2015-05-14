@@ -177,7 +177,7 @@ public class MergeBean implements MergeBeanLocal {
     }
 
     @Override
-    public String getUpdatedFile(Long fid, String token, String browserID, String email, String changes, String dateTime) {
+    public String getUpdatedFile(Long fid, String token, String browserID, String changes, String dateTime) {
         Long uid = sessionFacade.findByToken(token).getId();
         if (dateTime.equals("do_revert"))
             return revertVersion(fid, browserID, uid);

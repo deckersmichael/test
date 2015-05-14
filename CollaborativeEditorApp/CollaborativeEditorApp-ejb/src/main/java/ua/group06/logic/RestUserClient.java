@@ -5,6 +5,7 @@
  */
 package ua.group06.logic;
 
+import javax.ejb.Stateless;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;

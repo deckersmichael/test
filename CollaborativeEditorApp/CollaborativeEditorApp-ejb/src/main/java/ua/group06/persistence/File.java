@@ -6,25 +6,27 @@
 package ua.group06.persistence;
 
 import java.io.Serializable;
-import java.sql.Clob;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import javax.persistence.Column;
+import javax.ejb.EJB;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import ua.group06.entities.User;
 import ua.group06.logic.MergeBeanLocal.Change;
 import ua.group06.logic.MergeBeanLocal.Clear;
+import ua.group06.logic.RestUserClient;
 
 /**
  *
@@ -37,7 +39,7 @@ import ua.group06.logic.MergeBeanLocal.Clear;
             query="SELECT f FROM File f WHERE f.ownerId = :uid"),
     @NamedQuery(
             name="File.findAllForCollabs",
-            query="SELECT f FROM File f WHERE :uemail MEMBER OF f.collabIds")
+            query="SELECT f FROM File f WHERE :uid MEMBER OF f.collabIds")
 })
 public class File implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -45,10 +47,12 @@ public class File implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotNull
-    private Long ownerId;
-    @OneToMany
-    private Collection<PersistString> collabIds;
-    private List<String> spectatorIds;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private PersistLong ownerId;
+    @OneToMany(cascade = CascadeType.ALL)
+    private Collection<PersistLong> collabIds;
+    
+    //private Collection<PersistLong> spectatorIds;
     @NotNull
     private String name;
     @Lob
@@ -56,26 +60,17 @@ public class File implements Serializable {
     
     private ArrayList<String> RecentChanges_tokens;
 
-    public ArrayList<String> getCollabIds() {
-        ArrayList<String> ret = new ArrayList<String>();
-        for (PersistString ps : this.collabIds){
-            ret.add(ps.getContent());
-        }
-        return ret;
-    }
-
-    public void _persistency_set_collabIds() {
-        this.collabIds = collabIds;
+    public ArrayList<Long> getCollabIds() {
+        return new ArrayList(this.collabIds);
     }
     
     public File () {}
     
     public File(Long userId, String name, String content) {
-        this.ownerId = userId;
+        this.ownerId = new PersistLong(userId);
         this.name = name;
         this.content = content;
-        this.collabIds = new ArrayList<PersistString>();
-        this.spectatorIds = new ArrayList<>();
+        //this.spectatorIds = new ArrayList<>();
         this.RecentChanges_changesList = new ArrayList<>();
         this.RecentChanges_users = new ArrayList<>();
         this.RecentChanges_tokens = new ArrayList<>();
@@ -84,36 +79,43 @@ public class File implements Serializable {
         this.latestVersionGetTime = new HashMap<>();
     }
     
-    public void addCollaborator(String email) {
-        this.collabIds.add(new PersistString(email));
+    public boolean addCollaborator(Long id) {
+        this.collabIds.add(new PersistLong(id));
+        return true;
     }
     
-    public boolean removeCollaborator(String email) {
-        return collabIds.remove(email);
+    public boolean removeCollaborator(Long id) {
+        return (this.collabIds.remove(new PersistLong(id)));
     }
     
-    public Collection<String> getCollaborators() {
-        return this.getCollabIds();
+    public Collection<Long> getCollaborators() {
+        Collection<Long> c = new ArrayList();
+        for (PersistLong pl : this.collabIds)
+            c.add(pl.getContent());
+        return c;
     }
     
-    public void addSpectator(String id) {
-        this.spectatorIds.add(id);
-    }
+    /*public void addSpectator(Long id) {
+        this.spectatorIds.add(new PersistLong(id));
+    }*/
     
-    public boolean removeSpectator(String email) {
-        return spectatorIds.remove(email);
-    }
+    /*public boolean removeSpectator(Long id) {
+        return spectatorIds.remove(new PersistLong(id));
+    }*/
         
-    public List<String> getSpectators() {
-        return this.spectatorIds;
-    }
+    /*public ArrayList<Long> getSpectators() {
+        ArrayList<Long> c = new ArrayList();
+        for (PersistLong pl : this.spectatorIds)
+            c.add(pl.getContent());
+        return c;
+    }*/
     
     public Long getUserId() {
-        return ownerId;
+        return ownerId.getContent();
     }
 
     public void setUserId(Long ownerId) {
-        this.ownerId = ownerId;
+        this.ownerId = new PersistLong(ownerId);
     }
 
     public String getName() {

@@ -6,29 +6,41 @@
 package ua.group06.presentation;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import ua.group06.entities.User;
 import ua.group06.logic.FileServiceLocal;
-import ua.group06.logic.RestUserClient;
 import ua.group06.persistence.File;
 import ua.group06.util.ServletUtil;
 
 /**
  *
- * @author Michael Deckers
+ * @author Michael
  */
-@WebServlet(name = "FileShares", urlPatterns = {"/shares"})
-public class FileShares extends HttpServlet {
+@WebServlet(name = "ChatWindow", urlPatterns = {"/chat"})
+public class ChatWindow extends HttpServlet {
 
     @EJB
     private FileServiceLocal fileService;
-
-    private RestUserClient ruc = new RestUserClient();
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("chat.jsp").forward(request, response);
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -44,14 +56,15 @@ public class FileShares extends HttpServlet {
             throws ServletException, IOException {
         String fidString = request.getParameter("id");
         
-        if (fidString != null) {
-            Long fid = Long.parseLong(fidString);
-            User user = ServletUtil.currentUser(request);
-            File file = fileService.show(fid, user);
-            request.setAttribute("file", file);
-            request.getRequestDispatcher("fileshares.jsp").forward(request, response);
+        Long fid = Long.parseLong(fidString);
+        User user = ServletUtil.currentUser(request);
+        File file = fileService.show(fid, user);
+            
+        if (file.getUserId().equals(user.getId()) || file.getCollaborators().contains(user.getEmail())){
+            request.setAttribute("fid", fid);
+            processRequest(request, response);
         } else {
-            response.sendRedirect("homepage");
+            request.getRequestDispatcher("NotAllowed.jsp").forward(request, response);
         }
     }
 
@@ -66,17 +79,7 @@ public class FileShares extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
-        String type = request.getParameter("type");
-        String name = request.getParameter("name");
-        String id = request.getParameter("id");
-        if (name != null && !name.isEmpty()) {
-            User user = ServletUtil.currentUser(request);
-            fileService.updateCollabs(Long.parseLong(id), user, /*type.equals("collab")*/true, ruc.getByEmail(name).getId(), action.equals("add"));
-            response.sendRedirect("shares?id=" + Long.parseLong(id));
-        } else {
-            response.sendRedirect("shares?id=" + Long.parseLong(id));
-        }
+        processRequest(request, response);
     }
 
     /**

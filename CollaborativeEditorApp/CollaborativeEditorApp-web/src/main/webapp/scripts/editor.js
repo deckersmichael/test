@@ -106,13 +106,13 @@ $(document).ready(function () {
         
         date.push.apply(date, time);
         
-        var data = {fileId: Info.fileId, token: Info.token, browserID: Info.browserID, email: Info.email, content: "", changes: "", timeDate: JSON.stringify(date)};
+        var data = {fileId: Info.fileId, token: Info.token, browserID: Info.browserID, content: "", changes: "", timeDate: JSON.stringify(date)};
         sendUpdate(data);
     }
 
     window.revertToPrevious = function () {
         editor.setValue("");
-        var data = {fileId: Info.fileId, token: Info.token, browserID: Info.browserID, email: Info.email, content: "", changes: "", timeDate: "do_revert"};
+        var data = {fileId: Info.fileId, token: Info.token, browserID: Info.browserID, content: "", changes: "", timeDate: "do_revert"};
         sendUpdate(data);
     }
     

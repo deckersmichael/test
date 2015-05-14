@@ -19,7 +19,6 @@ public class FileUpdate implements Serializable {
     private Long fileId;
     private String token;
     private String content;
-    private String email;
     private String changes;
     private String browserID;
     private String timeDate;
@@ -27,11 +26,10 @@ public class FileUpdate implements Serializable {
     public FileUpdate() {
     }
 
-    public FileUpdate(Long id, String token, String email, String content, String changes) {
+    public FileUpdate(Long id, String token, String content, String changes) {
         this.fileId = id;
         this.token = token;
         this.content = content;
-        this.email = email;
         this.changes = changes;
     }
 
@@ -41,14 +39,6 @@ public class FileUpdate implements Serializable {
 
     public void setChanges(String changes) {
         this.changes = changes;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-    
-    public void setEmail(String email){
-        this.email = email;
     }
     
     public String getToken() {

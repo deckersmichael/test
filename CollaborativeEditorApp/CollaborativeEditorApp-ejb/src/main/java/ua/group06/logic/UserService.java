@@ -26,6 +26,7 @@ public class UserService implements UserServiceLocal {
         return restClient.loginLDAB(username, password);
     }
     
+    @Override
     public User loginTwitter(String username){
         return restClient.loginTwitter(username);
     }

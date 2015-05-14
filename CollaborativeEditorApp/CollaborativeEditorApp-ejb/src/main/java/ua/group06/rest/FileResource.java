@@ -27,7 +27,7 @@ public class FileResource extends RestResource {
     @Path("update")
     // TODO: handle errors
     public Response update(FileUpdate changes) {
-        String content = fileService.updateContent(changes.getFileId(), changes.getToken(), changes.getBrowserID(), changes.getEmail(), changes.getContent(), changes.getChanges(), changes.getTimeDate());
+        String content = fileService.updateContent(changes.getFileId(), changes.getToken(), changes.getBrowserID(), changes.getContent(), changes.getChanges(), changes.getTimeDate());
         return Response.ok(content).build();
     }
 

@@ -6,6 +6,7 @@
 package ua.group06.persistence;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -14,28 +15,35 @@ import javax.persistence.Id;
  * @author michaeldeckers
  */
 @Entity
-public class PersistString implements Serializable{
+public class PersistLong implements Serializable{
     @Id
-    private String content;
+    private Long content;
     
-    public PersistString(){
+    public PersistLong(){
         
     }
-    public PersistString(String content){
+    public PersistLong(Long content){
         this.content = content;
     }
     
-    public String getContent(){
+    public Long getContent(){
         return this.content;
     }
     
     @Override
     public boolean equals(Object object){
-        if (object instanceof PersistString){
-            if (((PersistString)object).getContent().equals(this.getContent())){
+        if (object instanceof PersistLong){
+            if (((PersistLong)object).getContent().equals(this.getContent())){
                 return true;
             }
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.content);
+        return hash;
     }
 }
