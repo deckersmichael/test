@@ -46,6 +46,13 @@ public class UserService extends RestResource {
         return Response.ok(user).build();
     }
     
+    @GET
+    @Path("/findByEmail")
+    public Response findByEmail(@QueryParam("email") String email) {
+        User user = (User) userFacade.findByEmail(email);
+        return Response.ok(user).build();
+    }
+
     @POST
     public Response register(User user) {
         User createdUser = regService.register(user);

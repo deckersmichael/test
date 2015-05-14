@@ -59,4 +59,14 @@ public class RestUserClient {
         return user;
     }
 
+    public User getByEmail(String email) {
+        Client client = ClientBuilder.newClient();
+        User user = client
+                .target(ROOT + "/findByEmail")
+                .queryParam("email", email)
+                .request(MediaType.APPLICATION_JSON)
+                .get(User.class);
+        return user;
+    }
+
 }
