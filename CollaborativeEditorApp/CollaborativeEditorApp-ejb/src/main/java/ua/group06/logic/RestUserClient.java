@@ -54,13 +54,5 @@ public class RestUserClient {
                 .get(User.class);
         return user;
     }
-        
-        /*Client client = ClientBuilder.newClient();
-        User user = client
-                .target(ROOT + "/login")
-                .queryParam("email", email)
-                .queryParam("password", password)
-                .request(MediaType.APPLICATION_JSON)
-                .get(User.class);*/
-        //return user;
+
 }
