@@ -7,7 +7,6 @@ package ua.group06.rest;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -21,7 +20,6 @@ import ua.group06.logic.ExternalUserServiceLocal;
 import ua.group06.logic.RestUserClient;
 import ua.group06.logic.UserAuthenticationServiceLocal;
 import ua.group06.logic.UserRegistrationServiceLocal;
-import ua.group06.persistence.AbstractUser;
 import ua.group06.persistence.ExternalUser;
 import ua.group06.persistence.User;
 
@@ -42,7 +40,7 @@ public class UserService extends RestResource {
     private ExternalUserServiceLocal externalUserService;
 
     @GET
-    @Path("{id}")
+    @Path("/{id}")
     public Response find(@PathParam("id") Long id) {
         User user = (User)userFacade.find(id);
         return Response.ok(user).build();
