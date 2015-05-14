@@ -13,6 +13,7 @@ import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
+import ua.group06.logic.AuthenticationChecker;
 
 /**
  *
@@ -24,19 +25,18 @@ public class AuthenticationFilter implements ContainerRequestFilter,
                                              ContainerResponseFilter {
   @Override
   public void filter(ContainerRequestContext crc) throws IOException {
-      if (!validToken(crc)) crc.abortWith(unAuthorized());
+      if (!validKey(crc)) crc.abortWith(unAuthorized());
   }
 
   @Override
   public void filter(ContainerRequestContext crc, ContainerResponseContext crc1) 
                 throws IOException {
-      if (!validToken(crc)) crc1.setStatus(401);
+      if (!validKey(crc)) crc1.setStatus(401);
   }
 
-  // TODO: extract this to service
-  private boolean validToken(ContainerRequestContext crc) {
-      String token = crc.getHeaders().getFirst("x-api-key");
-      return "secret".equals(token);
+  private boolean validKey(ContainerRequestContext crc) {
+      String key = crc.getHeaders().getFirst("x-api-key");
+      return AuthenticationChecker.isValidKey(key);
   }
 
   private Response unAuthorized() {

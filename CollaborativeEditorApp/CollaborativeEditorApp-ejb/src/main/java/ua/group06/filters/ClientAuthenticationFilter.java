@@ -20,7 +20,7 @@ import javax.ws.rs.ext.Provider;
 public class ClientAuthenticationFilter implements ClientRequestFilter, 
                                                    ClientResponseFilter {
     private final String AUTH_HEADER = "x-api-key";
-    private final String AUTH_TOKEN = "secret";
+    private final String AUTH_KEY = "secret";
 
     @Override
     public void filter(ClientRequestContext crc) throws IOException {
@@ -33,7 +33,7 @@ public class ClientAuthenticationFilter implements ClientRequestFilter,
     }
 
     private void addHeaderToRequest(ClientRequestContext crc) {
-        crc.getHeaders().putSingle(AUTH_HEADER, AUTH_TOKEN);
+        crc.getHeaders().putSingle(AUTH_HEADER, AUTH_KEY);
     }
 
 }
