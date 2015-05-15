@@ -54,8 +54,13 @@ public class Statistics extends HttpServlet {
             request.setAttribute("name", file.getName());
             request.setAttribute("ownername", ruc.get(file.getUserId()).getFirstName() + " " + ruc.get(file.getUserId()).getLastName());
             request.setAttribute("owneremail", ruc.get(file.getUserId()).getEmail());
-            request.setAttribute("creationdate", new Date(file.getRecentChanges_timestamps().get(0)).toLocaleString());
-            request.setAttribute("lastmodified", new Date(file.getRecentChanges_timestamps().get(file.getRecentChanges_timestamps().size()-1)).toLocaleString());
+            if (!file.getRecentChanges_timestamps().isEmpty()){
+                request.setAttribute("creationdate", new Date(file.getRecentChanges_timestamps().get(0)).toLocaleString());
+                request.setAttribute("lastmodified", new Date(file.getRecentChanges_timestamps().get(file.getRecentChanges_timestamps().size()-1)).toLocaleString());
+            } else {
+                request.setAttribute("creationdate", "n/a");
+                request.setAttribute("lastmodified", "n/a");
+            }
             request.setAttribute("contentsize", file.getContent().length());
             
             request.setAttribute("collabJSON", statBean.getCollaboratorMap(fid));
