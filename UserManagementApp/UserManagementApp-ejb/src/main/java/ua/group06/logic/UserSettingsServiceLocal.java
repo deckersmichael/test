@@ -18,4 +18,5 @@ public interface UserSettingsServiceLocal {
     AbstractUser edit(AbstractUser user);
     User editPassword(User user);
     boolean checkPassword(String cleartext, String encrypted);
+    public boolean checkEmailAvailible(String email);
 }

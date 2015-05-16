@@ -8,6 +8,7 @@
 <%@page import="ua.group06.persistence.ExternalUser"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <t:template>
 </t:template>
@@ -25,6 +26,9 @@
         <div class="container">
             <form class="form-signup" action="./settings" method="POST">
                 <h2 class="form-signup-heading">Settings</h2>
+                <label for="inputEmail" class="sr-only">Email</label>
+                <input type="text" name="email" id="inputEmail" class="form-control" placeholder="Email" value="${user.email}" required autofocus>
+                <br>
                 <label for="inputFN" class="sr-only">First name</label>
                 <input type="text" name="firstName" id="inputFN" class="form-control" placeholder="First name" value="${user.firstName}" required autofocus>
                 <br>
@@ -47,6 +51,9 @@
                     } 
                 %>
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Submit changes</button>
+                <text>
             </form>
+            <h4><c:out value="${message}"/></h4>
+            <c:remove var="message" scope="session"/>
         </div>
     </body>
