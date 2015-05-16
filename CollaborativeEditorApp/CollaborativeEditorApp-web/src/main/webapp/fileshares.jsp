@@ -43,6 +43,7 @@
             <input type="hidden" name="id" value="${file.id}" />
             <br>
             <button type="submit">Share file</button>
+            <textfield id="status">
         </form>
     </div>
 </t:template>

@@ -113,18 +113,21 @@ public class FileService implements FileServiceLocal {
     }
 
     @Override
-    public void updateCollabs(Long fid, User user, boolean edit, Long newid, boolean add) {
+    public boolean updateCollabs(Long fid, User user, boolean edit, Long newid, boolean add) {
         File file = fileFacade.find(fid);
+        boolean worked = false;
         if (allowedFile(fid, user)) {
             if (edit){
                 User addUser = ruc.get(newid);
                 if (addUser != null){
                     if (add){
-                        file.addCollaborator(addUser.getId());
+                        worked = file.addCollaborator(addUser.getId());
                     }
                     else {
-                        file.removeCollaborator(addUser.getId());
+                        worked = file.removeCollaborator(addUser.getId());
                     }
+                } else {
+                    worked = false;
                 }
             /*else 
                 if (add)
@@ -134,6 +137,7 @@ public class FileService implements FileServiceLocal {
             }
             fileFacade.edit(file);
         }
+        return worked;
     }
 
     @Override

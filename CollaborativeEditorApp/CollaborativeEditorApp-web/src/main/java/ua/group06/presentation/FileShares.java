@@ -49,6 +49,7 @@ public class FileShares extends HttpServlet {
             User user = ServletUtil.currentUser(request);
             File file = fileService.show(fid, user);
             request.setAttribute("file", file);
+            request.setAttribute("worked", true);
             request.getRequestDispatcher("fileshares.jsp").forward(request, response);
         } else {
             response.sendRedirect("homepage");
@@ -70,13 +71,17 @@ public class FileShares extends HttpServlet {
         String type = request.getParameter("type");
         String name = request.getParameter("name");
         String id = request.getParameter("id");
+        
+        User user = ServletUtil.currentUser(request);
+        boolean worked = false;
         if (name != null && !name.isEmpty()) {
-            User user = ServletUtil.currentUser(request);
-            fileService.updateCollabs(Long.parseLong(id), user, /*type.equals("collab")*/true, ruc.getByEmail(name).getId(), action.equals("add"));
-            response.sendRedirect("shares?id=" + Long.parseLong(id));
-        } else {
-            response.sendRedirect("shares?id=" + Long.parseLong(id));
+            worked = fileService.updateCollabs(Long.parseLong(id), user, /*type.equals("collab")*/true, ruc.getByEmail(name).getId(), action.equals("add"));  
         }
+        Long fid = Long.parseLong(id);
+        File file = fileService.show(fid, user);
+        request.setAttribute("file", file);
+        request.setAttribute("worked", worked);
+        request.getRequestDispatcher("fileshares.jsp").forward(request, response);
     }
 
     /**

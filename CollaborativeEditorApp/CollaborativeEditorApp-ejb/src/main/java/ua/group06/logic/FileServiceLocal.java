@@ -33,6 +33,6 @@ public interface FileServiceLocal {
 
     String updateContent(Long fid, String token, String browserID, String content, String changes, String timeDate);
     
-    void updateCollabs(Long fid, User user, boolean edit, Long newid, boolean add);
+    boolean updateCollabs(Long fid, User user, boolean edit, Long newid, boolean add);
     
 }
