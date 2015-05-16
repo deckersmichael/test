@@ -30,9 +30,6 @@ public class ExternalUser extends AbstractUser {
     @NotNull
     //@Column(name="USERNAME")
     private String username;
-    /*@Column(name="PLATFORM")
-    @Enumerated(EnumType.ORDINAL)
-    private Platform platform;*/
     
     /*@Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
             + "[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"

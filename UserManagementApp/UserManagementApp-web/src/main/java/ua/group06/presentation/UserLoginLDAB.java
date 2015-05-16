@@ -53,6 +53,7 @@ public class UserLoginLDAB extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
         String login    = request.getParameter("email");
         String password = request.getParameter("password");
         restClient=new RestUserClient();
@@ -68,13 +69,18 @@ public class UserLoginLDAB extends HttpServlet {
                     String email = userinfo.get(4).toString();
                     ExternalUser user = userService.authenticateOrCreate(login, email, fname, lname);
                     if (user != null) {
-                        HttpSession session = request.getSession();
                         session.setAttribute("user", user);
+                    }
+                    else{
+                        session.setAttribute("message", "login failed, check your username and password.");
                     }
                 }
             } catch (JSONException ex) {
                 //response.sendRedirect("homepage");
             }
+        }
+        else{
+            session.setAttribute("message", "login failed, check your username and password.");
         }
         response.sendRedirect("homepage");
        

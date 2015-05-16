@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -33,6 +34,8 @@
             </form>>
             <br>
             <p class="text-center">No account yet? <a href="registration">Register now!</a></p>
+            <h4 class="text-center"><c:out value="${message}"/></h4>
+            <c:remove var="message" scope="session"/>
         </div>
     </body>
 </html>

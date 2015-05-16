@@ -24,11 +24,16 @@ public class UserRegistrationService implements UserRegistrationServiceLocal {
 
     @Override
     public User register(User user) {
-        try {
-            userFacade.create( passwordService.encrypt(user) );
-        } catch (EntityExistsException e) {
-            // TODO: Should we change the return type or should we throw exception?
-            user = null;
+        if (userFacade.findByEmail(user.getEmail())!=null){
+            user=null;
+        }
+        else{
+            try {
+                userFacade.create( passwordService.encrypt(user) );
+            } catch (EntityExistsException e) {
+                // TODO: Should we change the return type or should we throw exception?
+                user = null;
+            }
         }
         return user;
     }
