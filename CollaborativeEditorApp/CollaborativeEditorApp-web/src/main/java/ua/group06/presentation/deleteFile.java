@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import ua.group06.entities.User;
 import ua.group06.logic.FileServiceLocal;
+import ua.group06.persistence.File;
 import ua.group06.util.ServletUtil;
 
 /**
@@ -40,7 +41,12 @@ public class deleteFile extends HttpServlet {
         if (fidString != null) {
             Long fid = Long.parseLong(fidString);
             User user = ServletUtil.currentUser(request);
-            fileService.delete(fid, user);
+            File file = fileService.getFile(fid);
+            Long uid = user.getId();
+            if (file.getCollabIds().contains(uid))
+                fileService.updateCollabs(fid, user, true, uid, false);
+            else 
+                fileService.delete(fid, user);
         }
         response.sendRedirect("files");
     }
