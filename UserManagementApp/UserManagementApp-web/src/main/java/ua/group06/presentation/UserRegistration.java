@@ -52,6 +52,7 @@ public class UserRegistration extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
         String fname    = request.getParameter("firstName");
         String lname    = request.getParameter("lastName");
         String email    = request.getParameter("email");
@@ -59,10 +60,13 @@ public class UserRegistration extends HttpServlet {
         User user = new User(fname, lname, email, password);
         User createdUser = userService.register(user);
         if (createdUser != null) {
-            HttpSession session = request.getSession();
             session.setAttribute("user", user);
+            response.sendRedirect("homepage");
         }
-        response.sendRedirect("homepage");
+        else{
+            session.setAttribute("message", "The email you entered is already in use");
+            response.sendRedirect("registration");
+        }
     }
 
     /**

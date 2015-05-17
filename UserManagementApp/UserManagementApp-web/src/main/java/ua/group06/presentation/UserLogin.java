@@ -52,13 +52,15 @@ public class UserLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.err.println("In login");
+        HttpSession session = request.getSession();
         String email    = request.getParameter("email");
         String password = request.getParameter("password");
         User user = authService.authenticate(email, password);
         if (user != null) {
-            HttpSession session = request.getSession();
             session.setAttribute("user", user);
+        }
+        else{
+            session.setAttribute("message", "login failed, check your email and password.");
         }
         response.sendRedirect("homepage");
     }

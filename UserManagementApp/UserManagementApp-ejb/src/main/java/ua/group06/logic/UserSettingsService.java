@@ -48,6 +48,18 @@ public class UserSettingsService implements UserSettingsServiceLocal {
     public boolean checkPassword(String cleartext, String encrypted) {
         return passwordService.checkPassword(cleartext, encrypted);
     }
+
+    @Override
+    public boolean checkEmailAvailible(String email) {
+        if (userFacade.findByEmail(email) ==null){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    
     
     
     
