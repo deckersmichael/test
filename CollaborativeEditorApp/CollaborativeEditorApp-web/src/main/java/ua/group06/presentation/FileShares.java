@@ -6,6 +6,7 @@
 package ua.group06.presentation;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +17,7 @@ import ua.group06.entities.User;
 import ua.group06.logic.FileServiceLocal;
 import ua.group06.logic.RestUserClient;
 import ua.group06.persistence.File;
+import ua.group06.persistence.PersistLong;
 import ua.group06.util.ServletUtil;
 
 /**
@@ -48,6 +50,10 @@ public class FileShares extends HttpServlet {
             Long fid = Long.parseLong(fidString);
             User user = ServletUtil.currentUser(request);
             File file = fileService.show(fid, user);
+            ArrayList<String> users = new ArrayList<>();
+            for (PersistLong i : file.getCollabIds())
+                users.add(ruc.get(i.getContent()).getEmail());
+            request.setAttribute("collabs", users);
             request.setAttribute("file", file);
             request.setAttribute("worked", true);
             request.getRequestDispatcher("fileshares.jsp").forward(request, response);
@@ -75,10 +81,20 @@ public class FileShares extends HttpServlet {
         User user = ServletUtil.currentUser(request);
         boolean worked = false;
         if (name != null && !name.isEmpty()) {
-            worked = fileService.updateCollabs(Long.parseLong(id), user, /*type.equals("collab")*/true, ruc.getByEmail(name).getId(), action.equals("add"));  
+            User adderUser = ruc.getByEmail(name);
+            if (adderUser == null) {
+                worked = false;
+            } else {
+                Long adderID = ruc.getByEmail(name).getId();
+                worked = fileService.updateCollabs(Long.parseLong(id), user, /*type.equals("collab")*/true, ruc.getByEmail(name).getId(), action.equals("add")); 
+            }
         }
+        ArrayList<String> users = new ArrayList<>();
         Long fid = Long.parseLong(id);
         File file = fileService.show(fid, user);
+        for (PersistLong i : file.getCollabIds())
+            users.add(ruc.get(i.getContent()).getEmail());
+        request.setAttribute("collabs", users);
         request.setAttribute("file", file);
         request.setAttribute("worked", worked);
         request.getRequestDispatcher("fileshares.jsp").forward(request, response);

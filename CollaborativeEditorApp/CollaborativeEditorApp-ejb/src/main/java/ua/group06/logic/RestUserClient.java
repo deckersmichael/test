@@ -17,7 +17,7 @@ import ua.group06.filters.ClientAuthenticationFilter;
  * @author matson
  */
 public class RestUserClient {
-    private final String ROOT = "http://localhost:8080/UserManagementApp-web/resources/users";
+    private final String ROOT = "http://127.0.0.1:8080/UserManagementApp-web/resources/users";
 
     // Add authentication filter to default client.
     private Client getClient() {

@@ -12,6 +12,7 @@ import javax.persistence.EntityExistsException;
 import ua.group06.business.FileFacadeLocal;
 import ua.group06.entities.User;
 import ua.group06.persistence.File;
+import ua.group06.persistence.PersistLong;
 import ua.group06.persistence.Session;
 
 /**
@@ -99,7 +100,7 @@ public class FileService implements FileServiceLocal {
      * @return whether the user can modify
      */
     private boolean allowedFile(Long fid, User user) {
-        return fileFacade.find(fid).getUserId().equals(user.getId()) || fileFacade.find(fid).getCollabIds().contains(user.getId());
+        return fileFacade.find(fid).getUserId().equals(user.getId()) || fileFacade.find(fid).getCollabIds().contains(new PersistLong(user.getId()));
     }
 
     private boolean allowed(File file, User user) {
@@ -109,7 +110,7 @@ public class FileService implements FileServiceLocal {
     // Check if user is allowed to edit given file.
     private boolean allowedToEdit(String token, File file) {
         Session session = sessionService.findByToken(token);
-        return file.getUserId().equals(session.getUserId()) || file.getCollabIds().contains(session.getUserId());
+        return file.getUserId().equals(session.getUserId()) || file.getCollabIds().contains(new PersistLong(session.getUserId()));
     }
 
     @Override

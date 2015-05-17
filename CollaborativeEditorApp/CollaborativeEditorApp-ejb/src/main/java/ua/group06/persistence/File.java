@@ -60,7 +60,7 @@ public class File implements Serializable {
     
     private ArrayList<String> RecentChanges_tokens;
 
-    public ArrayList<Long> getCollabIds() {
+    public ArrayList<PersistLong> getCollabIds() {
         return new ArrayList(this.collabIds);
     }
     

@@ -17,7 +17,7 @@
             <th>Email</th>
             <th>Permission</th>
             <th>Delete</th>
-                <c:forEach items="${file.collaborators}" var="collaborator">
+                <c:forEach items="${collabs}" var="collaborator">
                 <tr>
                     <td>${collaborator}</td>
                     <td>Collaborator</td>
@@ -43,7 +43,11 @@
             <input type="hidden" name="id" value="${file.id}" />
             <br>
             <button type="submit">Share file</button>
-            <textfield id="status">
+            <div><font color="red" id="error"></font></div>
+            <script>
+                if (${worked} === false)
+                    document.getElementById("error").innerHTML="Something went wrong, the user probably doesn't exist."; 
+            </script>
         </form>
     </div>
 </t:template>
